@@ -8,7 +8,7 @@ const cartModel = require('../models/cart-model');
 
 module.exports.registerUser = async (req, res) => {
 
-    const { name, email, password, phoneNumber, role } = req.body;
+    const { name, email, password, phoneNumber, role, gender } = req.body;
 
     try {
 
@@ -26,13 +26,13 @@ module.exports.registerUser = async (req, res) => {
 
         await newCart.save();
 
-
         const newUser = new userModel({
             name,
             email,
             password: hashedPassword,
             phoneNumber,
             role,
+            gender,
             cart:newCart
         });
 
