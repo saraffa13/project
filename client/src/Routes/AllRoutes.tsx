@@ -3,6 +3,9 @@ import Home from "../pages/Home"
 import Layout from "../pages/Layout"
 import Login from "../pages/Login/Login"
 import SignUp from "../pages/Login/SignUp"
+import About from "../pages/About"
+import HasAuth from "../HOC/HasAuth"
+import Medicine from "../pages/Medicine"
 
 const AllRoutes = () => {
     
@@ -17,11 +20,19 @@ const AllRoutes = () => {
                 },
                 {
                     path:'/login',
-                    element:<Login />
+                    element:<HasAuth><Login /></HasAuth>
                 },
                 {
                     path:'/signup',
-                    element:<SignUp />
+                    element:<HasAuth><SignUp /></HasAuth>
+                },
+                {
+                    path:'/about',
+                    element:<About />
+                },
+                {
+                    path:'/medicines',
+                    element:<Medicine />
                 },
             ]
         }

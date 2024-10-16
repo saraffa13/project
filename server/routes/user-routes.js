@@ -8,7 +8,7 @@ userRouter.post('/register', registerUser);
 
 userRouter.post('/login', loginUser);
 
-userRouter.post('/logout', logoutUser);
+userRouter.get('/logout', logoutUser);
 
 userRouter.post('/delete', adminAuth, deleteUser);
 

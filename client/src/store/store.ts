@@ -1,14 +1,19 @@
-// store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './slicers/authSlicer'; 
+import { TypedUseSelectorHook, useDispatch as useReduxDispatch, useSelector as useReduxSelector } from 'react-redux';
+import authSlicer from './slicers/authSlicer';
+import medicineSlicer from './slicers/medicineSlicer';
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer, 
-  },
+    reducer: {
+        auth: authSlicer,
+        medicine: medicineSlicer
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export type AuthState = ReturnType<typeof authReducer>;
+export const useDispatch = () => useReduxDispatch<AppDispatch>();
+export const useSelector: TypedUseSelectorHook<RootState> = useReduxSelector;
+
+export default store;

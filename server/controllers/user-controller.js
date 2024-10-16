@@ -81,6 +81,8 @@ module.exports.loginUser = async (req, res) => {
                 data:existingUser
             })
 
+        }else {
+            throw new Error("Wrong credentials!")
         }
 
     } catch (error) {

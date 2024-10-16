@@ -23,3 +23,20 @@ module.exports.createMedicine = async (req, res) => {
         })
     }
 }
+
+module.exports.getMedicine = async (req, res) => {
+
+    try {       
+        
+        const medicine = await medicineModel.find();
+        res.status(202).json({
+            message: "Here is the medicine",
+            data:medicine
+        })
+        
+    }catch(error){
+        res.status(404).json({
+            message:"Couldn't create medicine. Something went wrong!"
+        })
+    }
+}

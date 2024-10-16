@@ -18,10 +18,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: '*', 
-    methods: ['GET', 'POST', 'PUT','PATCH', 'DELETE'],
-    credentials: true,
+    origin: 'http://localhost:5174', // Your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+    credentials: true, // Allow credentials (cookies)
 };
+1
+
 app.use(cors(corsOptions));
 
 app.get('/',(req,res)=>{
