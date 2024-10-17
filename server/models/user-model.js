@@ -30,6 +30,10 @@ const userSchema = mongoose.Schema({
     cart:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Cart'
+    },
+    orders:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Order'
     }
 }, { versionKey: false, timeStamps: true })
 

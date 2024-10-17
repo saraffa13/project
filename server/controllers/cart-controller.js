@@ -9,13 +9,14 @@ const getCartItems = async (req, res) => {
     }
 
     try {
-        let cartData = await cartModel.findById(cartId);
-      
+        let cartData = await cartModel.findById(cartId).populate('cartItems.item');
+
         res.status(200).json({
             message: "Cart Data successfully retrived",
             data: cartData
         })
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             message: "Something went wrong!"
         })
@@ -25,7 +26,8 @@ const getCartItems = async (req, res) => {
 const addToCart = async (req, res) => {
 
     const user = req.user;
-    const { medicineId } = req.body;
+    const { medicineId, name } = req.body;
+
 
     if (!user) {
         return res.status(401).json({ message: 'You must be logged in to view your cart' })
@@ -35,7 +37,7 @@ const addToCart = async (req, res) => {
 
     try {
         let cartData = await cartModel.findById(cartId);
-        cartData.cartItems = [...cartData.cartItems, { item: medicineId, quantity: 1 }];
+        cartData.cartItems = [...cartData.cartItems, { item: medicineId, name, quantity: 1 }];
 
         await cartData.save();
 
@@ -71,6 +73,7 @@ const updateQuantity = async (req, res) => {
             if (cartItem.item == medicineId) {
                 return {
                     item: cartItem.item,
+                    name: cartItem.name,
                     quantity: cartItem.quantity + (type === "increment" ? +1 : -1)
                 }
             } else {

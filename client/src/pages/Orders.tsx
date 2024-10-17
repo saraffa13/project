@@ -1,14 +1,8 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMedicines } from "../store/slicers/medicineSlicer";
 import MedicineCard from "../components/MedicineCard";
 
-const Medicine = () => {
+const Orders = () => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchMedicines());
-  }, [dispatch]);
 
   const { medicines } = useSelector((state: any) => state.medicine);
   const { cartItems } = useSelector((state: any) => state.cart);
@@ -22,4 +16,4 @@ const Medicine = () => {
   );
 };
 
-export default Medicine;
+export default Orders;

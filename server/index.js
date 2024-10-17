@@ -6,6 +6,8 @@ const connection = require("./config/dbConfig");
 const userRouter = require('./routes/user-routes');
 const cartRouter = require('./routes/cart-routes');
 const medicineRouter = require('./routes/medicine-routes');
+const translationRouter = require('./routes/translation-routes');
+const orderRouter = require('./routes/order-routes');
 
 const cookieParser = require('cookie-parser');
 
@@ -18,10 +20,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: 'http://localhost:5174', // Your frontend URL
+    origin: 'http://localhost:5173', 
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-    credentials: true, // Allow credentials (cookies)
+    allowedHeaders: ['Content-Type', 'Authorization'], 
+    credentials: true,
 };
 1
 
@@ -34,6 +36,8 @@ app.get('/',(req,res)=>{
 app.use('/user', userRouter)
 app.use('/medicine', medicineRouter)
 app.use('/cart', cartRouter)
+app.use('/translation', translationRouter )
+app.use('/order', orderRouter )
 
 app.listen(PORT, async () => {
     await connection;

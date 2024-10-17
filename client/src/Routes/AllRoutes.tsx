@@ -6,6 +6,8 @@ import SignUp from "../pages/Login/SignUp"
 import About from "../pages/About"
 import HasAuth from "../HOC/HasAuth"
 import Medicine from "../pages/Medicine"
+import Cart from "../pages/Cart"
+import Orders from "../pages/Orders"
 
 const AllRoutes = () => {
     
@@ -33,6 +35,14 @@ const AllRoutes = () => {
                 {
                     path:'/medicines',
                     element:<Medicine />
+                },
+                {
+                    path:'/cart',
+                    element:<Cart />
+                },
+                {
+                    path:'/orders',
+                    element:<Orders />
                 },
             ]
         }
