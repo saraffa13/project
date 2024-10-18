@@ -6,7 +6,6 @@ import { notify } from '../../utils/helper';
 import { login } from '../../store/slicers/authSlicer';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
-axios.defaults.withCredentials = true;
 let baseURL = import.meta.env.VITE_BASE_URL;
 
 export const Login = () => {

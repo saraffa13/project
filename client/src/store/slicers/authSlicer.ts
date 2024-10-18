@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { clearCart } from './cartSlicer';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 

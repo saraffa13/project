@@ -22,7 +22,7 @@ function App() {
 
   return (
     <>
-      <ToastContainer draggable/>
+      <ToastContainer draggable />
       <AllRoutes />
     </>
   );

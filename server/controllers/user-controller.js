@@ -33,7 +33,8 @@ module.exports.registerUser = async (req, res) => {
             phoneNumber,
             role,
             gender,
-            cart:newCart
+            cart:newCart,
+            orders:[]
         });
 
         await newUser.save();

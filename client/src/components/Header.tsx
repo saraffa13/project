@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { changeLanguage, logout } from "../store/slicers/authSlicer";
 import { getKeyWord } from "../utils/helper";
+import { clearCart } from "../store/slicers/cartSlicer";
 
 
 axios.defaults.withCredentials = true;
@@ -27,10 +28,10 @@ const Header = () => {
     const logoutHandler = async () => {
         try {
             const response = await axios.get(`${baseURL}/user/logout`, { withCredentials: true });
-            console.log(response.data);
             setSignIn(false);
             navigate('/login')
             dispatch(logout());
+            dispatch(clearCart());
             return response.data;
         } catch (error) {
             console.error("Error during login:", error);

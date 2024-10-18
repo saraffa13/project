@@ -13,12 +13,11 @@ const getOrders = async (req, res) => {
     try {
         let orderData = await orderModel.find().populate('orders').populate('name');
 
-        console.log(orderData);
-
         res.status(200).json({
             message: "Order Data successfully retrived",
             data: orderData
         })
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -30,7 +29,7 @@ const getOrders = async (req, res) => {
 const postOrders = async (req, res) => {
 
     const user = req.user;
-    const orders = user.orders;
+    const { name, address, deliveryDate } = req.body;
 
     if (!user) {
         return res.status(401).json({ message: 'You must be logged in to view your cart' })
@@ -39,15 +38,27 @@ const postOrders = async (req, res) => {
     try {
         let cartData = await cartModel.find();
 
-        if(cartData){
-
+        if(!cartData){
+            res.status(501).json({
+                message: "There are no items in the cart!",
+                data: orderData
+            })
         }
 
-        console.log(orderData);
+        const newOrder = new orderModel({
+            name,
+            address,
+            orders:user.cart,
+            deliveryDate:Date.now()
+        })
+
+        const order = await newOrder.save();
+        console.log(order);
+
 
         res.status(200).json({
             message: "Order Data successfully retrived",
-            data: orderData
+            // data: orderData
         })
     } catch (error) {
         console.log(error);
