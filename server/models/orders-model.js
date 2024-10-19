@@ -14,6 +14,9 @@ const orderSchema = new mongoose.Schema({
     },
     deliveryDate : {
         type:Number
+    },
+    status:{
+        type:String
     }
 });
 

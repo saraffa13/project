@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AllRoutes from './Routes/AllRoutes';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { checkLanguage, checkUserName, getKeyWords } from './store/slicers/authSlicer';
+import { checkLanguage, checkUserName, getKeyWords, logout } from './store/slicers/authSlicer';
 import { fetchCart } from './store/slicers/cartSlicer';
 import { fetchMedicines } from './store/slicers/medicineSlicer';
 

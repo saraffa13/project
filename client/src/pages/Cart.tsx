@@ -7,7 +7,6 @@ const CartPage = () => {
 
   const { cartItems } = useSelector((state: any) => state.cart);
   const {languageKeyWords, language} = useSelector((state:any)=>state.auth)
-  console.log(cartItems);
 
   return (
     <section className="container mx-auto px-4 py-10">

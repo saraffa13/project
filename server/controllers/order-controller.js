@@ -1,5 +1,6 @@
 const cartModel = require("../models/cart-model");
 const orderModel = require("../models/orders-model");
+const userModel = require("../models/user-model");
 
 const getOrders = async (req, res) => {
 
@@ -53,13 +54,26 @@ const postOrders = async (req, res) => {
         })
 
         const order = await newOrder.save();
-        console.log(order);
+
+        const newCart = new cartModel({
+            cartItems:[],
+            totalPrice:0
+        });
+
+        const cartCreated = await newCart.save();
+
+        const retrivedUser = await userModel.findById(user._id);
+        console.log(user, retrivedUser);
+        retrivedUser.cart = cartCreated._id;
+        retrivedUser.orders = [...retrivedUser.orders, order._id];
+        await retrivedUser.save();
 
 
         res.status(200).json({
             message: "Order Data successfully retrived",
             // data: orderData
         })
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -67,6 +81,7 @@ const postOrders = async (req, res) => {
         })
     }
 }
+
 
 
 

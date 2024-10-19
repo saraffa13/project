@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const userModel = require("../models/user-model");
 const blackListTokenModel = require('../models/blacklist-token-model');
 const cartModel = require('../models/cart-model');
+const orderModel = require('../models/orders-model');
 
 
 module.exports.registerUser = async (req, res) => {
@@ -23,7 +24,7 @@ module.exports.registerUser = async (req, res) => {
             cartItems:[],
             totalPrice:0
         });
-
+    
         await newCart.save();
 
         const newUser = new userModel({

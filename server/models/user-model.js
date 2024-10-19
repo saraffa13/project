@@ -31,10 +31,10 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'Cart'
     },
-    orders:{
+    orders:[{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Order'
-    }
+    }]
 }, { versionKey: false, timeStamps: true })
 
 const userModel = mongoose.model('User', userSchema)
