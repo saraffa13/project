@@ -4,6 +4,7 @@ const getCartItems = async (req, res) => {
     const user = req.user;
     const cartId = user.cart;
 
+
     if (!user) {
         return res.status(401).json({ message: 'You must be logged in to view your cart' })
     }

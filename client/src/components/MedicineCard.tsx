@@ -12,7 +12,7 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 
 const MedicineCard = ({ medicine, type, quantity }: any) => {
   const { cartItems } = useSelector((state: any) => state.cart);
-  const { loggedIn } = useSelector((state: any) => state.auth);
+  const { loggedIn, role } = useSelector((state: any) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -92,7 +92,7 @@ const MedicineCard = ({ medicine, type, quantity }: any) => {
               ${quantity > 0 ? quantity * medicine.price : medicine.price}
             </span>
 
-            {loggedIn && quantity === 0 && (
+            {loggedIn && role!='admin' && quantity === 0 && (
               <button
                 onClick={() => addMedicineToCart(medicine._id, medicine.name)}
                 className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform duration-200"

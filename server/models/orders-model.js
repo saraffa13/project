@@ -1,9 +1,18 @@
 const mongoose = require('mongoose')
 
 const orderSchema = new mongoose.Schema({
-    name:{
+    user:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User'
+    },
+    name:{
+        type:String,
+    },
+    email:{
+        type:String
+    },
+    phone:{
+        type:String,
     },
     orders:{
         type:mongoose.Schema.Types.ObjectId,
@@ -13,7 +22,10 @@ const orderSchema = new mongoose.Schema({
         type:String,
     },
     deliveryDate : {
-        type:Number
+        type:String
+    },
+    paymentMethod:{
+        type:String
     },
     status:{
         type:String

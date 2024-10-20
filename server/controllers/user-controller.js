@@ -21,10 +21,10 @@ module.exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 5)
 
         const newCart = new cartModel({
-            cartItems:[],
-            totalPrice:0
+            cartItems: [],
+            totalPrice: 0
         });
-    
+
         await newCart.save();
 
         const newUser = new userModel({
@@ -34,8 +34,8 @@ module.exports.registerUser = async (req, res) => {
             phoneNumber,
             role,
             gender,
-            cart:newCart,
-            orders:[]
+            cart: newCart,
+            orders: []
         });
 
         await newUser.save();
@@ -59,7 +59,7 @@ module.exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        
+
         const existingUser = await userModel.findOne({ email });
 
         if (!existingUser) {
@@ -73,17 +73,17 @@ module.exports.loginUser = async (req, res) => {
             const token = await jwt.sign({
                 _id: existingUser._id,
                 role: existingUser.role,
-                user:existingUser,
+                user: existingUser,
             }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' });
 
-            res.cookie('token', token, {httpOnly:true, maxAge:24*60*60*1000})
+            res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
 
             return res.status(200).json({
-                message:"Login in Successful!",
-                data:existingUser
+                message: "Login in Successful!",
+                data: existingUser
             })
 
-        }else {
+        } else {
             throw new Error("Wrong credentials!")
         }
 
@@ -95,42 +95,106 @@ module.exports.loginUser = async (req, res) => {
         });
     }
 
-} 
+}
 
 
 module.exports.logoutUser = async (req, res) => {
 
-    const token =  req.cookies.token;
+    const token = req.cookies.token;
     const blacklistedToken = new blackListTokenModel({ token });
     await blacklistedToken.save();
     res.clearCookie('token')
     res.send('Logout Successful');
 
-} 
+}
+
+module.exports.getUser = async (req, res) => {
+
+    const user = req.user;
+    console.log(user);
+    try {
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found!" })
+        }
+
+        return res.status(200).json({
+            message: "User!",
+            data: user
+        })
+
+    }
+     catch (error) {
+        console.error('Something went wrong:', error);
+        res.status(500).json({
+            message: 'Couldn\'t login! Something went wrong!',
+            error: error.message
+        });
+    }
+
+}
+
+module.exports.getAllUsers = async (req, res) => {
+
+    const user = req.user;
+    
+    try {
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found!" })
+        }
+        
+        if(user.role === 'user'){
+            return res.status(200).json({
+                message: "User!",
+                data: []
+            })
+        }else{
+            const user = await userModel.find();
+            return res.status(200).json({
+                message: "User!",
+                data: user
+            })
+        }
+
+
+    }
+     catch (error) {
+        console.error('Something went wrong:', error);
+        res.status(500).json({
+            message: 'Couldn\'t login! Something went wrong!',
+            error: error.message
+        });
+    }
+
+}
 
 
 module.exports.deleteUser = async (req, res) => {
+
     const { userId } = req.body;
 
     try {
+
         const user = await userModel.findByIdAndDelete(userId);
-        if(!user){
+
+        if (!user) {
             return res.status(404).json({
-                message:"User Not Found",
+                message: "User Not Found",
             })
         }
-        
-        await cartModel.findByIdAndDelete(user.cart)
 
         res.status(200).json({
-            message:"User Deleted",
-            data:user
+            message: "User Deleted",
+            data: user
         })
-    }catch(error){
+
+    } catch (error) {
         res.status(500).json({
-            message:"User Couldn\'t be deleted. Something went wrong!",
+            message: "User Couldn\'t be deleted. Something went wrong!",
         })
     }
-} 
+
+}
 
 

@@ -2,11 +2,17 @@ import { useSelector } from "react-redux";
 import MedicineCard from "../components/MedicineCard";
 import { MdRemoveShoppingCart } from "react-icons/md"; 
 import { getKeyWord } from "../utils/helper";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
 
   const { cartItems } = useSelector((state: any) => state.cart);
   const {languageKeyWords, language} = useSelector((state:any)=>state.auth)
+  const navigate = useNavigate();
+
+  const checkoutHandler = () => {
+    navigate('/checkout');
+  }
 
   return (
     <section className="container mx-auto px-4 py-10">
@@ -32,7 +38,7 @@ const CartPage = () => {
       <div className="mt-10 text-right">
         <h2 className="text-xl font-bold"></h2>
         {(cartItems && cartItems.length > 0) && (
-          <button className="bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-600">
+          <button onClick={checkoutHandler} className="bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-600">
             {getKeyWord("APP_PROCEED_TO_CHECKOUT", languageKeyWords, language)}
           </button>
         )}

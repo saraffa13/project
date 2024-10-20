@@ -4,8 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import AllRoutes from './Routes/AllRoutes';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { checkLanguage, checkUserName, getKeyWords, logout } from './store/slicers/authSlicer';
-import { fetchCart } from './store/slicers/cartSlicer';
+import { checkLanguage, checkUserName, getKeyWords, getUsers, logout } from './store/slicers/authSlicer';
+import { fetchCart, fetchOrders } from './store/slicers/cartSlicer';
 import { fetchMedicines } from './store/slicers/medicineSlicer';
 
 function App() {
@@ -18,6 +18,8 @@ function App() {
     dispatch(checkLanguage())
     dispatch(fetchMedicines())
     dispatch(fetchCart())
+    dispatch(getUsers())
+    dispatch(fetchOrders())
   }, [])
 
   return (

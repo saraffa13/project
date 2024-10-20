@@ -8,6 +8,11 @@ import HasAuth from "../HOC/HasAuth"
 import Medicine from "../pages/Medicine"
 import Cart from "../pages/Cart"
 import Orders from "../pages/Orders"
+import Checkout from "../pages/Checkout"
+import Contact from "../pages/Contact"
+import Admin from "../pages/Admin"
+import AdminOrders from "../pages/AdminOrders"
+import AdminUsers from "../pages/AdminUsers"
 
 const AllRoutes = () => {
     
@@ -41,8 +46,28 @@ const AllRoutes = () => {
                     element:<Cart />
                 },
                 {
+                    path:'/admin/orders',
+                    element:<AdminOrders />
+                },
+                {
+                    path:'/admin/users',
+                    element:<AdminUsers />
+                },
+                {
                     path:'/orders',
                     element:<Orders />
+                },
+                {
+                    path:'/checkout',
+                    element:<Checkout />
+                },
+                {
+                    path:'/contact',
+                    element:<Contact />
+                },
+                {
+                    path:'/admin',
+                    element:<Admin />
                 },
             ]
         }

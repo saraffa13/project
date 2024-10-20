@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { clearCart } from './cartSlicer';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -11,7 +9,9 @@ interface UserState {
     password: string;
     loggedIn: boolean;
     language:string,
-    languageKeyWords:any
+    languageKeyWords:any,
+    role:any,
+    users:any,
 }
 
 
@@ -20,7 +20,9 @@ const initialUser: UserState = {
     password: "",
     loggedIn: false,
     language:"english",
-    languageKeyWords:{}
+    languageKeyWords:{},
+    role:"user",
+    users:[]
 };
 
 export const checkLanguage = createAsyncThunk<string>(
@@ -34,11 +36,17 @@ export const checkLanguage = createAsyncThunk<string>(
         }
     }
 );
-export const checkUserName = createAsyncThunk<boolean>(
+
+export const checkUserName = createAsyncThunk<any>(
     "auth/checkUserName",
     async () => {
         const loggedIn = await localStorage.getItem('loggedIn');
-        if(loggedIn && loggedIn === 'true')return true;
+        if(loggedIn && loggedIn === 'true'){
+            const response = await axios.get(`${baseURL}/user/get-user`, { withCredentials: true })
+            console.log(response.data.data);
+            return response.data.data
+
+        }
         else return false;
     }
 );
@@ -48,8 +56,16 @@ export const getKeyWords = createAsyncThunk<boolean>(
     "auth/getKeyWords",
     async () => {
         const response = await axios.get(`${baseURL}/translation/`, { withCredentials: true })
-        console.log(response.data);
         return response.data.data[0].translations
+    }
+);
+
+export const getUsers = createAsyncThunk<any>(
+    "auth/getUsers",
+    async () => {
+        const response = await axios.get(`${baseURL}/user/get-all-users`, { withCredentials: true })
+        console.log(response.data.data);
+        return response.data.data
     }
 );
 
@@ -68,6 +84,11 @@ export const authSlice = createSlice({
             state.password = "";
             state.loggedIn = false;
         },
+        deleteUser: (state, action) => {
+            console.log(action);
+            state.users = state.users.filter((user:any)=>user._id!=action.payload)
+            
+        },
         changeLanguage: (state:any, action:any)=>{
             state.language = action.payload
         }
@@ -77,14 +98,25 @@ export const authSlice = createSlice({
             state.language = action.payload;
         });
         builder.addCase(checkUserName.fulfilled, (state: UserState, action) => {
-            state.loggedIn = action.payload;
+            console.log(action.payload);
+            if(action.payload === false){
+                state.loggedIn = false;
+            }else{
+                state.email = action.payload.email,
+                state.role = action.payload.role
+                state.loggedIn = true;
+            }
         });
         builder.addCase(getKeyWords.fulfilled, (state: UserState, action) => {
             state.languageKeyWords = action.payload;
+        });
+
+        builder.addCase(getUsers.fulfilled, (state: UserState, action) => {
+            state.users = action.payload;
         });
     }
 });
 
 
-export const { login, logout, changeLanguage } = authSlice.actions;
+export const { login, logout, changeLanguage, deleteUser } = authSlice.actions;
 export default authSlice.reducer;

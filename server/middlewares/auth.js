@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 const blackListTokenModel = require('../models/blacklist-token-model');
+const userModel = require('../models/user-model');
 
 const checkBlacklistedToken = async (req, res, next) => {
     const token = req.cookies.token;
@@ -33,13 +34,14 @@ const auth = async (req, res, next) => {
         }
 
         const userData = await jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if (!userData) {
+        const latestUser = await userModel.findById(userData._id);
+        if (!latestUser) {
             return res.status(401).json({
                 message: "Token verification failed!"
             })
         }
 
-        req.user = userData.user
+        req.user = latestUser;
         next();
     })
 

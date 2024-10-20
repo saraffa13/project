@@ -5,12 +5,14 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 
 interface cartState {
     cartItems: [],
-    totalPrice: number
+    totalPrice: number,
+    orders:[]
 }
 
 const initialCart: cartState = {
     cartItems: [],
-    totalPrice: 0
+    totalPrice: 0,
+    orders:[]
 };
 
 export const fetchCart = createAsyncThunk<any>(
@@ -21,6 +23,15 @@ export const fetchCart = createAsyncThunk<any>(
         return response.data.data;
     }
 );
+export const fetchOrders = createAsyncThunk<any>(
+    "cart/fetchOrders",
+    async () => {
+        const response = await axios.get(`${baseURL}/order/`, { withCredentials: true })
+        console.log(response.data.data);
+        return response.data.data;
+    }
+);
+
 
 export const cartSlice = createSlice({
     name: 'cart',
@@ -50,6 +61,9 @@ export const cartSlice = createSlice({
         builder.addCase(fetchCart.fulfilled, (state: cartState, action) => {
             state.cartItems = action.payload.cartItems;
             state.totalPrice = action.payload.totalPrice;
+        });
+        builder.addCase(fetchOrders.fulfilled, (state: cartState, action) => {
+            state.orders = action.payload
         });
     }
 });
