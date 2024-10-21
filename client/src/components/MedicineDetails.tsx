@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 
 const MedicineDetails = ({ medicines }: any) => {
-  const { id } = useParams(); // Get the medicine ID from URL params
-  const medicine = medicines.find((med: any) => med.id === parseInt(id)); // Find the specific medicine by ID
-  const navigate = useNavigate(); // To navigate back to medicine list
+  const { id } = useParams(); 
+  const medicine = medicines.find((med: any) => med.id === parseInt(id)); 
+  const navigate = useNavigate(); 
 
   if (!medicine) {
     return <div>Medicine not found!</div>;
@@ -11,7 +11,7 @@ const MedicineDetails = ({ medicines }: any) => {
 
   return (
     <div className="container mx-auto p-6">
-      {/* Go Back Button */}
+     
       <button
         onClick={() => navigate(-1)}
         className="bg-gray-500 text-white px-4 py-2 rounded mb-6"
@@ -20,7 +20,7 @@ const MedicineDetails = ({ medicines }: any) => {
       </button>
 
       <div className="flex flex-col lg:flex-row bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-        {/* Left section - Medicine image */}
+        
         <div className="lg:w-1/2 p-6">
           <img
             src={medicine.image_url}
@@ -29,7 +29,7 @@ const MedicineDetails = ({ medicines }: any) => {
           />
         </div>
 
-        {/* Right section - Medicine details */}
+        
         <div className="lg:w-1/2 p-6">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
             {medicine.name}
@@ -41,7 +41,7 @@ const MedicineDetails = ({ medicines }: any) => {
             Usage: {medicine.usage || 'Not specified'}
           </p>
 
-          {/* Price and Add to Cart */}
+        
           <div className="mt-6">
             <span className="text-2xl font-bold text-blue-500 dark:text-blue-400">
               ${medicine.price.toFixed(2)}
@@ -51,7 +51,7 @@ const MedicineDetails = ({ medicines }: any) => {
             </button>
           </div>
 
-          {/* Additional Details */}
+         
           <div className="mt-6">
             <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200">
               Other Information:

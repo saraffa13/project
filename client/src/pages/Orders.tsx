@@ -30,7 +30,7 @@ const Orders = () => {
               className="p-6 bg-white border border-gray-200 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:border-blue-600"
             >
               <h2 className="text-xl font-semibold mb-4 text-blue-600">
-                Order ID: {order._id}
+                Order ID: <br/> {order._id}
               </h2>
               <p className="mb-2 text-gray-600">
                 Delivery Date:{" "}

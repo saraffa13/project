@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 
-const categories = [
-  { name: 'Pain Relievers', img: 'https://images.unsplash.com/photo-1549477754-350cf45a1772?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', link: '/category/pain-relievers' },
-  { name: 'Vitamins', img: 'https://images.unsplash.com/photo-1577401132921-cb39bb0adcff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', link: '/category/vitamins' },
-  { name: 'Cold & Flu', img: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', link: '/category/cold-flu' },
-  { name: 'Personal Care', img: 'https://plus.unsplash.com/premium_photo-1670381252200-873b6e3c6363?q=80&w=1867&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', link: '/category/personal-care' },
+const ctg = [
+  'https://images.unsplash.com/photo-1549477754-350cf45a1772?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+   'https://images.unsplash.com/photo-1577401132921-cb39bb0adcff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  'https://plus.unsplash.com/premium_photo-1670381252200-873b6e3c6363?q=80&w=1867&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
 ];
 
 
@@ -40,7 +41,13 @@ const backgroundImages = [
 ];
 
 const Home = () => {
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const {medicines} = useSelector((state:any)=>state.medicine)
+  const categories = [...new Set(medicines.map((medicine: any) => medicine.category))].slice(0,4);
+
+  console.log(categories);
+
 
   
   useEffect(() => {
@@ -74,14 +81,14 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-0">
           <h2 className="text-3xl font-bold text-center mb-12">Popular Categories</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {categories.map((category) => (
-              <Link key={category.name} to={category.link} className="text-center group">
+            {categories.map((category, index) => (
+              <Link key={category} to={`medicines/${category}`} className="text-center group">
                 <img
-                  src={category.img}
-                  alt={category.name}
+                  src={ctg[index]}
+                  alt={category}
                   className="w-28 h-28 mx-auto rounded-full shadow-lg group-hover:scale-105 transition-transform duration-300"
                 />
-                <p className="mt-4 text-lg font-semibold text-gray-700 group-hover:text-blue-600">{category.name}</p>
+                <p className="mt-4 text-lg font-semibold text-gray-700 group-hover:text-blue-600">{category}</p>
               </Link>
             ))}
           </div>

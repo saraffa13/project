@@ -53,7 +53,7 @@ const MedicineCard = ({ medicine, type, quantity }: any) => {
   // Delete medicine from cart
   const deleteMedicine = async (medicineId: string) => {
     try {
-      const response = await axios.post(`${baseURL}/cart/delete/`,{
+      const response = await axios.post(`${baseURL}/cart/delete/`, {
         medicineId,
       }, {
         withCredentials: true,
@@ -67,7 +67,7 @@ const MedicineCard = ({ medicine, type, quantity }: any) => {
 
   return (
     <Link to="" className={`${type === "cart" ? "w-full" : "w-full"}  sm:w-1/2 md:w-1/3 lg:w-1/4 p-4`}>
-      <div className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
+      <div className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl rounded-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
         <div className="relative">
           <img
             src={medicine.image_url}
@@ -89,10 +89,10 @@ const MedicineCard = ({ medicine, type, quantity }: any) => {
 
           <div className="mt-6 flex justify-between items-center">
             <span className="text-lg font-bold text-blue-500 dark:text-blue-400">
-              ${quantity > 0 ? quantity * medicine.price : medicine.price}
+              ${quantity > 0 ? (quantity * medicine.price).toFixed(2) : medicine.price.toFixed(2)}
             </span>
 
-            {loggedIn && role!='admin' && quantity === 0 && (
+            {loggedIn && role != 'admin' && quantity === 0 && (
               <button
                 onClick={() => addMedicineToCart(medicine._id, medicine.name)}
                 className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
@@ -107,11 +107,10 @@ const MedicineCard = ({ medicine, type, quantity }: any) => {
                   <button
                     disabled={quantity <= 1}
                     onClick={() => updateQty(medicine._id, "decrement")}
-                    className={`p-2 bg-gray-300 text-gray-700 rounded-full ${
-                      quantity <= 1
+                    className={`p-2 bg-gray-300 text-gray-700 rounded-full ${quantity <= 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-400"
-                    } transition-colors duration-200`}
+                      } transition-colors duration-200`}
                   >
                     <GrFormSubtract size={18} />
                   </button>
@@ -124,7 +123,6 @@ const MedicineCard = ({ medicine, type, quantity }: any) => {
                   </button>
                 </div>
 
-                {/* Styled Delete button */}
                 <button
                   onClick={() => deleteMedicine(medicine._id)}
                   className="p-2 bg-transparent border border-red-500 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200"

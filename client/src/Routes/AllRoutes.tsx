@@ -38,8 +38,12 @@ const AllRoutes = () => {
                     element:<About />
                 },
                 {
-                    path:'/medicines',
-                    element:<Medicine />
+                    path:'/medicines/',
+                    element:<Medicine />,
+                },
+                {
+                    path:'/medicines/:type',
+                    element:<Medicine />,
                 },
                 {
                     path:'/cart',
