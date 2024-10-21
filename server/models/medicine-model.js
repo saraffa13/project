@@ -22,8 +22,12 @@ const medicineSchema = new mongoose.Schema({
         type: String
     },    
     exp_date: {
-        type: Date,
+        type: Number,
         required: true
+    },
+    inventory_quantity:{
+        type:Number,
+        required:true
     }
 }, { timestamps: true, versionKey: false });
 

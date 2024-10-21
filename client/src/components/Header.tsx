@@ -20,6 +20,7 @@ const Header = () => {
 
 
     const { loggedIn, languageKeyWords, language, role:admin } = useSelector((state: any) => state.auth)
+    const { cartItems } = useSelector((state: any) => state.cart)
 
     const dispatch = useDispatch();
 

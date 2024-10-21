@@ -22,7 +22,7 @@ const orderSchema = new mongoose.Schema({
         type:String,
     },
     deliveryDate : {
-        type:String
+        type:Date
     },
     paymentMethod:{
         type:String

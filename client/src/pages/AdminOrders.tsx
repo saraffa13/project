@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   FaShippingFast,
@@ -32,6 +32,7 @@ const AdminOrders = () => {
   const sortedOrders = filteredOrders.sort((a: any, b: any) => {
     const dateA = new Date(a.deliveryDate);
     const dateB = new Date(b.deliveryDate);
+
     return sortOrder === "asc" ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
   });
 
@@ -56,7 +57,6 @@ const AdminOrders = () => {
         Your Admin Orders
       </h1>
 
-      {/* Search and Filter Controls */}
       <div className="max-w-5xl mx-auto mb-8 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <input
           type="text"
@@ -108,7 +108,6 @@ const AdminOrders = () => {
         </div>
       </div>
 
-      {/* Clear Filters Button in a separate div */}
       <div className="max-w-5xl mx-auto mb-8 text-right">
         <button
           onClick={clearFilters}
@@ -118,7 +117,6 @@ const AdminOrders = () => {
         </button>
       </div>
 
-      {/* Orders List */}
       <div className="max-w-5xl mx-auto space-y-10">
         {filteredByDateOrders.length > 0 ? (
           filteredByDateOrders.map((order: any) => {

@@ -13,6 +13,7 @@ import Contact from "../pages/Contact"
 import Admin from "../pages/Admin"
 import AdminOrders from "../pages/AdminOrders"
 import AdminUsers from "../pages/AdminUsers"
+import MedicineForm from "../pages/MedicineForm"
 
 const AllRoutes = () => {
     
@@ -40,6 +41,10 @@ const AllRoutes = () => {
                 {
                     path:'/medicines/',
                     element:<Medicine />,
+                },
+                {
+                    path:'/addMedicine/',
+                    element:<MedicineForm />,
                 },
                 {
                     path:'/medicines/:type',

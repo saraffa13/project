@@ -111,7 +111,7 @@ module.exports.logoutUser = async (req, res) => {
 module.exports.getUser = async (req, res) => {
 
     const user = req.user;
-    console.log(user);
+    // console.log(user);
     try {
         
         if (!user) {
