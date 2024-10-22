@@ -7,7 +7,7 @@ import { notify } from '../utils/helper';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
-// Cart Item Component
+
 const CartItem = ({ item }: any) => {
 	return (
 		<div className="flex justify-between items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm mb-4">
@@ -33,39 +33,39 @@ const CartItem = ({ item }: any) => {
 	);
 };
 
-// Order Summary Component
+
 const OrderSummary = ({ cartItems, calculateTotalPrice, displayDeliveryDate }: any) => {
 	return (
 		<div className="bg-white p-6 shadow-lg rounded-lg mb-8">
 			<h2 className="text-2xl font-semibold text-gray-700 mb-6">Order Summary</h2>
 
-			{/* Cart Items */}
+			
 			<div>
 				{cartItems.map((item: any) => (
 					<CartItem key={item._id} item={item} />
 				))}
 			</div>
 
-			{/* Total Price */}
+			
 			<div className="flex justify-between items-center border-t border-gray-200 mt-6 pt-4">
 				<h3 className="text-xl font-semibold text-gray-700">Total Price:</h3>
 				<p className="text-2xl font-bold text-gray-900">${calculateTotalPrice().toFixed(2)}</p>
 			</div>
 
-			{/* Delivery Date Notification */}
+			
 			<div className="mt-6 text-center text-gray-600">
 				<p>Estimated Delivery: {displayDeliveryDate}</p>
-				<p>3 days from today!</p>
+				<p>1 day from today!</p>
 			</div>
 		</div>
 	);
 };
 
-// Checkout Form Component
+
 const CheckoutForm = ({ handleSubmit, paymentMethod, setPaymentMethod, name, setName, email, setEmail, phone, setPhone, address, setAddress }: any) => {
 	return (
 		<form className="bg-white p-6 shadow-lg rounded-lg" onSubmit={handleSubmit}>
-			{/* Payment Method Dropdown */}
+			
 			<div className="mb-6">
 				<label className="block mb-2 text-gray-700 font-semibold">Payment Method:</label>
 				<select
@@ -81,7 +81,7 @@ const CheckoutForm = ({ handleSubmit, paymentMethod, setPaymentMethod, name, set
 				</select>
 			</div>
 
-			{/* User Details Form */}
+			
 			<div className="mb-6">
 				<label className="block mb-2 text-gray-700 font-semibold">Name:</label>
 				<input
@@ -125,7 +125,6 @@ const CheckoutForm = ({ handleSubmit, paymentMethod, setPaymentMethod, name, set
 				></textarea>
 			</div>
 
-			{/* Submit Button */}
 			<button
 				type="submit"
 				className="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow hover:bg-blue-700 transition duration-300 w-full"
@@ -136,7 +135,6 @@ const CheckoutForm = ({ handleSubmit, paymentMethod, setPaymentMethod, name, set
 	);
 };
 
-// Main Checkout Component
 const Checkout = () => {
 	const { cartItems } = useSelector((state: any) => state.cart);
 	const navigate = useNavigate();
@@ -150,14 +148,13 @@ const Checkout = () => {
 	const [deliveryDate, setDeliveryDate] = useState('');
 	const [displayDeliveryDate, setDisplayDeliveryDate] = useState('');
 
-	// Calculate the delivery date (3 days from now)
 	useEffect(() => {
 		const estimatedDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-		setDeliveryDate(estimatedDate.toISOString()); // Store in ISO format (for API request)
-		setDisplayDeliveryDate(estimatedDate.toLocaleDateString()); // Store in localized format (for UI display)
+		setDeliveryDate(estimatedDate.toISOString()); 
+		setDisplayDeliveryDate(estimatedDate.toLocaleDateString());
 	}, []);
 
-	// Check if cartItems is undefined or empty
+	
 	if (!cartItems || cartItems.length === 0) {
 		return (
 			<section className="p-8 bg-gray-100 min-h-screen">
@@ -167,14 +164,14 @@ const Checkout = () => {
 		);
 	}
 
-	// Calculate total price
+	
 	const calculateTotalPrice = () => {
 		return cartItems.reduce((total: number, item: any) => {
 			return total + item.item.price * item.quantity;
 		}, 0);
 	};
 
-	// Handle form submission
+	
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
@@ -201,10 +198,10 @@ const Checkout = () => {
 			<h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Checkout</h1>
 
 			<div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-				{/* Order Summary */}
+				
 				<OrderSummary cartItems={cartItems} calculateTotalPrice={calculateTotalPrice} displayDeliveryDate={displayDeliveryDate} />
 
-				{/* Checkout Form */}
+				
 				<CheckoutForm
 					handleSubmit={handleSubmit}
 					paymentMethod={paymentMethod}

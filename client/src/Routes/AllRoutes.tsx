@@ -14,6 +14,8 @@ import Admin from "../pages/Admin"
 import AdminOrders from "../pages/AdminOrders"
 import AdminUsers from "../pages/AdminUsers"
 import MedicineForm from "../pages/MedicineForm"
+import MedicineDetail from "../pages/MedicineDetail"
+import MedicineLayout from "../pages/MedicineLayout"
 
 const AllRoutes = () => {
     
@@ -40,7 +42,16 @@ const AllRoutes = () => {
                 },
                 {
                     path:'/medicines/',
-                    element:<Medicine />,
+                    element:<MedicineLayout />,
+                    children:[
+                        {
+                            index:true,
+                            element:<Medicine />
+                        },{
+                            path:'/medicines/details/:id',
+                            element:<MedicineDetail />
+                        }
+                    ]
                 },
                 {
                     path:'/addMedicine/',

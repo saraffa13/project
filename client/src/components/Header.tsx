@@ -19,7 +19,7 @@ const Header = () => {
     const [signIn, setSignIn] = useLocalStorage<boolean>('loggedIn', false);
 
 
-    const { loggedIn, languageKeyWords, language, role:admin } = useSelector((state: any) => state.auth)
+    const { loggedIn, languageKeyWords, language, role: admin } = useSelector((state: any) => state.auth)
     const { cartItems } = useSelector((state: any) => state.cart)
 
     const dispatch = useDispatch();
@@ -63,20 +63,20 @@ const Header = () => {
                     </Link>
                     <div className="flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse gap-5  ">
 
-                        
+
                         {language === 'hindi' && <button onClick={() => languageChangeHandler('english')} type="button" data-dropdown-toggle="language-dropdown-menu" className=" inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                             <svg className="w-5 h-5 rounded-full me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3900 3900"><path fill="#b22234" d="M0 0h7410v3900H0z" /><path d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0" stroke="#fff" strokeWidth="300" /><path fill="#3c3b6e" d="M0 0h2964v2100H0z" /><g fill="#fff"> {/* Flag icons go here */} </g></svg>
                             English
                         </button>}
                         {language === 'english' && <button onClick={() => languageChangeHandler('hindi')} type="button" data-dropdown-toggle="language-dropdown-menu" className=" inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                             <svg className="w-5 h-5 rounded-full me-3" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="600" height="400" fill="#FF9933" /> 
+                                <rect width="600" height="400" fill="#FF9933" />
                                 <rect width="600" height="133.33" y="133.33" fill="white" />
-                                <rect width="600" height="133.33" y="266.66" fill="#138808" /> 
-                                <circle cx="300" cy="200" r="20" fill="#000080" /> 
-                                <circle cx="300" cy="200" r="30" fill="none" stroke="#000080" strokeWidth="4" /> 
+                                <rect width="600" height="133.33" y="266.66" fill="#138808" />
+                                <circle cx="300" cy="200" r="20" fill="#000080" />
+                                <circle cx="300" cy="200" r="30" fill="none" stroke="#000080" strokeWidth="4" />
                                 <g fill="#000080">
-                                    
+
                                     <path d="M300 170 L300 230 M300 230 L320 215 M300 230 L280 215 M300 230 L290 200 M300 230 L310 200" />
                                     <path d="M300 170 L300 230 M300 230 L320 215 M300 230 L280 215 M300 230 L290 200 M300 230 L310 200" />
                                     <path d="M300 170 L300 230 M300 230 L320 215 M300 230 L280 215 M300 230 L290 200 M300 230 L310 200" />
@@ -99,18 +99,22 @@ const Header = () => {
                                 <MdDarkMode />
                             )}
                         </button>
-                        
-                        
-                        
-                        {loggedIn && admin === 'user' && <Link to="/cart" >
-                            <MdShoppingCart className="dark:text-white" />
-                        </Link>}
 
-                    
+
+
+                        {loggedIn && admin === 'user' &&
+                            <div>
+                                <Link to="/cart" >
+                                    <MdShoppingCart className="dark:text-white" />
+                                </Link>
+                            </div>
+                        }
+
+
                         {admin === 'admin' && <Link to="/admin" className="w-full flex justify-center mt-4 py-2 px-4 border border-indigo-600 rounded-md shadow-sm text-sm font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:text-indigo-400 dark:border-indigo-400 dark:hover:bg-indigo-600 dark:hover:text-white">
                             {getKeyWord("APP_ADMIN", languageKeyWords, language)}
                         </Link>}
-                           
+
 
                         {loggedIn ?
                             <button onClick={logoutHandler} className="w-full flex justify-center mt-4 py-2 px-4 border border-indigo-600 rounded-md shadow-sm text-sm font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:text-indigo-400 dark:border-indigo-400 dark:hover:bg-indigo-600 dark:hover:text-white">
@@ -146,7 +150,7 @@ const Header = () => {
                                 <Link to="/contact" className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">{getKeyWord("APP_CONTACT", languageKeyWords, language)}</Link>
                             </li>}
                             {loggedIn && <li>
-                                <Link to={`${admin === 'user' ? '/orders' :'/admin/orders'}`} className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">{getKeyWord("APP_ORDERS", languageKeyWords, language)}</Link>
+                                <Link to={`${admin === 'user' ? '/orders' : '/admin/orders'}`} className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">{getKeyWord("APP_ORDERS", languageKeyWords, language)}</Link>
                             </li>}
                         </ul>
                     </div>

@@ -1,20 +1,22 @@
 const jwt = require('jsonwebtoken')
 
-const blackListTokenModel = require('../models/blacklist-token-model');
 const userModel = require('../models/user-model');
+const blackListTokenModel = require('../models/blacklist-token-model');
 
 const checkBlacklistedToken = async (req, res, next) => {
+
     const token = req.cookies.token;
 
-    if (!token) {
-        return res.status(401).send('No token provided.');
-    }
+    if (!token) return res.status(401).send('No token provided.');
 
     try {
         const isBlacklisted = await blackListTokenModel.findOne({ token });
+
         if (isBlacklisted) {
+            res.clearCookie('token')
             return res.status(401).send('Token has been invalidated.');
         }
+
         next();
 
     } catch (error) {
@@ -25,7 +27,9 @@ const checkBlacklistedToken = async (req, res, next) => {
 };
 
 const auth = async (req, res, next) => {
+
     checkBlacklistedToken(req, res, async () => {
+
         const token = req.cookies.token;
         if (!token) {
             return res.status(401).json({
@@ -35,14 +39,18 @@ const auth = async (req, res, next) => {
 
         const userData = await jwt.verify(token, process.env.JWT_SECRET_KEY);
         const latestUser = await userModel.findById(userData._id);
+
         if (!latestUser) {
+            res.clearCookie('token')
             return res.status(401).json({
                 message: "Token verification failed!"
             })
         }
 
         req.user = latestUser;
+        
         next();
+
     })
 
 }
@@ -56,7 +64,6 @@ const adminAuth = async (req, res, next) => {
         }
         next();
     });
-
 }
 
 module.exports = {

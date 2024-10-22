@@ -86,6 +86,7 @@ const Medicine = () => {
               key={medicine._id}
               medicine={medicine}
               type="notCart"
+              price={medicine.price}
               quantity={
                 cartItems.find((cartItem: any) => medicine._id === cartItem.item._id)
                   ? cartItems.find((cartItem: any) => medicine._id === cartItem.item._id).quantity

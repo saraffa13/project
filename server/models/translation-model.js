@@ -15,7 +15,7 @@ const translationSchema = new mongoose.Schema({
     translations: {
         
     }
-});
+}, { timestamps:false, versionKey:false });
 
 
 const translationModel = mongoose.model('Translation', translationSchema);

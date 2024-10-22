@@ -30,26 +30,23 @@ export const SignUp = () => {
                 phoneNumber: values.phoneNumber,
                 role: values.role,
             });
-            console.log(response.data);
-            return response.data; 
+            return response.data;
         } catch (error) {
             console.error("Error during sign up:", error);
-            throw error; 
+            throw error;
         }
     };
 
     const formSubmitHandler = async (values: FormValues, { setSubmitting, resetForm }: FormikHelpers<FormValues>) => {
-        console.log(values);
         try {
-            await signUp(values);
+            signUp(values);
             notify('Signup Successful!')
-        }catch(error){
+        } catch (error) {
             notify('Something went wrong')
             console.log('Something went wrong');
-        }finally {
-
+        } finally {
             setSubmitting(false);
-            // resetForm();
+            resetForm();
         }
     };
 
@@ -116,7 +113,7 @@ export const SignUp = () => {
                                     className="text-sm text-red-600 mt-1"
                                 />
                             </div>
-                            
+
                             <div>
                                 <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
                                     Gender

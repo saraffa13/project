@@ -27,7 +27,7 @@ const getCartItems = async (req, res) => {
 const addToCart = async (req, res) => {
 
     const user = req.user;
-    const { medicineId, name } = req.body;
+    const { medicineId, name, price } = req.body;
 
 
     if (!user) {
@@ -39,6 +39,7 @@ const addToCart = async (req, res) => {
     try {
         let cartData = await cartModel.findById(cartId);
         cartData.cartItems = [...cartData.cartItems, { item: medicineId, name, quantity: 1 }];
+        cartData.totalPrice += price;
 
         await cartData.save();
 
@@ -58,7 +59,7 @@ const addToCart = async (req, res) => {
 const updateQuantity = async (req, res) => {
 
     const user = req.user;
-    const { medicineId, type } = req.body;
+    const { medicineId, type , price} = req.body;
 
     if (!user) {
         return res.status(401).json({ message: 'You must be logged in to view your cart' })
@@ -81,6 +82,9 @@ const updateQuantity = async (req, res) => {
                 return cartItem;
             }
         })
+        
+        cartData.totalPrice = (type === 'increment' ? + 1 : -1) * price + cartData.totalPrice;
+        cartData.totalPrice.toFixed(2);
 
         await cartData.save();
 

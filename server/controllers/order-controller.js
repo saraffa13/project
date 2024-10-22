@@ -1,4 +1,5 @@
 const cartModel = require("../models/cart-model");
+const medicineModel = require("../models/medicine-model");
 const orderModel = require("../models/orders-model");
 const userModel = require("../models/user-model");
 
@@ -58,13 +59,19 @@ const postOrders = async (req, res) => {
 
     try {
 
-        let cartData = await cartModel.find();
+        let cartData = await cartModel.findById(user.cart);
 
         if (!cartData) {
             res.status(501).json({
                 message: "There are no items in the cart!",
             })
         }
+
+       cartData.cartItems.map(async (item)=>{
+        let medicine = await medicineModel.findById(item.item._id);
+        medicine.inventory_quantity -=  item.quantity;
+        await medicine.save();
+       })
 
         const newOrder = new orderModel({
             user:user._id,
@@ -75,7 +82,8 @@ const postOrders = async (req, res) => {
             paymentMethod,
             orders: user.cart,
             deliveryDate,
-            status: "pending"
+            status: "pending",
+            totalPrice:user.cart.totalPrice
         })
 
         const order = await newOrder.save();
@@ -95,7 +103,6 @@ const postOrders = async (req, res) => {
 
         res.status(200).json({
             message: "Order Data successfully retrived",
-            // data: orderData
         })
 
     } catch (error) {

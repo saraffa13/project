@@ -8,6 +8,5 @@ router.get('/', auth, getOrders);
 
 router.post('/post-order', auth, postOrders);
 
-// router.post('/delete-order', auth, deleteOrder);
 
 module.exports = router;

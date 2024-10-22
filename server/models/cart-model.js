@@ -4,24 +4,24 @@ const cartItemSchema = new mongoose.Schema({
     item: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Medicine',
-        required: true 
+        required: true
     },
-    name:{
-        type:String,
-        required:true
+    name: {
+        type: String,
+        required: true
     },
     quantity: {
         type: Number,
         required: true,
-        min: 1 
+        min: 1
     }
 });
 
 const cartSchema = new mongoose.Schema({
     cartItems: [cartItemSchema],
-    totalPrice : {
+    totalPrice: {
         type: Number,
-        required:true
+        required: true
     },
 });
 

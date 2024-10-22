@@ -11,7 +11,8 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        unique: true,
+        required: true,
     },
     password: {
         type: String,
@@ -27,14 +28,15 @@ const userSchema = mongoose.Schema({
         enum: ['admin', 'user'],
         default: 'user'
     },
-    cart:{
+    cart: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Cart'
+        ref: 'Cart'
     },
-    orders:[{
+    orders: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Order'
+        ref: 'Order'
     }]
+    
 }, { versionKey: false, timeStamps: true })
 
 const userModel = mongoose.model('User', userSchema)

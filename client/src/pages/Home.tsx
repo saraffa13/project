@@ -11,27 +11,6 @@ const ctg = [
 ];
 
 
-const featuredProducts = [
-  {
-    name: 'Ibuprofen 400mg',
-    price: 12.49,
-    img: 'https://images.unsplash.com/photo-1549477754-350cf45a1772?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    link: '/product/ibuprofen',
-  },
-  {
-    name: 'Vitamin C',
-    price: 8.99,
-    img: 'https://images.unsplash.com/photo-1577401132921-cb39bb0adcff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    link: '/product/vitamin-c',
-  },
-  {
-    name: 'Flu Medicine',
-    price: 6.49,
-    img: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    link: '/product/flu-medicine',
-  },
-];
-
 
 const backgroundImages = [
   'https://images.unsplash.com/photo-1674702727317-d29b2788dc4a?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -45,10 +24,6 @@ const Home = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const {medicines} = useSelector((state:any)=>state.medicine)
   const categories = [...new Set(medicines.map((medicine: any) => medicine.category))].slice(0,4);
-
-  console.log(categories);
-
-
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -99,9 +74,9 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-0">
           <h2 className="text-3xl font-bold text-center mb-12">Featured Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {featuredProducts.map((product) => (
+            {medicines.slice(0,3).map((product) => (
               <Link key={product.name} to={product.link} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                <img src={product.img} alt={product.name} className="w-full h-48 object-cover mb-6 rounded-t-lg" />
+                <img src={product.image_url} alt={product.name} className="w-full h-48 object-cover mb-6 rounded-t-lg" />
                 <div className="text-center">
                   <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
                   <p className="mt-2 text-lg font-semibold text-blue-600">${product.price.toFixed(2)}</p>
@@ -117,7 +92,7 @@ const Home = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Special Offers</h2>
           <div className="text-center">
             <p className="text-xl mb-4">Get 20% off on your first purchase!</p>
-            <Link to="/offers" className="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition">
+            <Link to="/medicines" className="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition">
               Explore Offers
             </Link>
           </div>

@@ -4,9 +4,6 @@ import { notify, notifyError } from '../utils/helper';
 let baseURL = import.meta.env.VITE_BASE_URL;
 
 
-interface MedicineFormProps {
-  onSubmit: (data: MedicineFormData) => void;
-}
 
 interface MedicineFormData {
   name: string;
@@ -18,7 +15,7 @@ interface MedicineFormData {
   inventory_quantity: number;
 }
 
-const MedicineForm: React.FC<MedicineFormProps> = () => {
+const MedicineForm= () => {
   const [formData, setFormData] = useState<MedicineFormData>({
     name: '',
     composition: '',
@@ -49,7 +46,6 @@ const MedicineForm: React.FC<MedicineFormProps> = () => {
       throw error;
     }
 
-    // console.log(formData);
   };
 
   return (

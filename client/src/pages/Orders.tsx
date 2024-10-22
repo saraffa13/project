@@ -18,6 +18,8 @@ const MedicineCard = ({ name, quantity }: MedicineCardProps) => {
 const Orders = () => {
   const { orders } = useSelector((state: any) => state.cart);
 
+  console.log(orders);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [searchByOrderId, setSearchByOrderId] = useState("");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });

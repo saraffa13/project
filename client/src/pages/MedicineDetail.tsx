@@ -1,0 +1,195 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { notify, notifyError } from "../utils/helper";
+
+
+let baseURL = import.meta.env.VITE_BASE_URL;
+
+
+const MedicineDetail = () => {
+    const { id } = useParams();
+
+    const navigate = useNavigate();
+
+    const { medicines } = useSelector((state: any) => state.medicine);
+    const { role } = useSelector((state: any) => state.auth);
+
+    const [medicine, setMedicine] = useState(()=>{
+        return medicines.find((medicine: any) => medicine._id === (id));
+    });
+
+    useEffect(()=>{
+        setMedicine(medicines?.find((medicine: any) => medicine?._id === (id)))
+    },[])
+  
+    const [isEditing, setIsEditing] = useState(false);
+
+    const [formData, setFormData] = useState({
+        _id:medicine._id,
+        name: medicine.name,
+        composition: medicine.composition,
+        price: medicine.price,
+        category: medicine.category,
+        inventory_quantity: medicine.inventory_quantity,
+    });
+
+    const handleEditClick = () => {
+        setIsEditing(true); 
+    };
+
+    const editMedicineHandler = async (e:React.FormEvent) =>{
+        e.preventDefault();
+        try {
+            await axios.post(`${baseURL}/medicine/edit-medicine`, {
+              medicine:formData
+            }, {withCredentials:true});
+            setIsEditing(false);
+            notify("Edited Successfully!")
+        } catch (error) {
+            console.error("Couldn't edit the medicine:", error);
+            notifyError("Couldn't edit the medicine!")
+            throw error; 
+        }finally {
+            navigate('/medicines')
+        }
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+    
+  
+    return (
+        <section className="container mx-auto p-6">
+            {!isEditing ? (
+                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-4xl mx-auto">
+                    <div className="flex justify-between items-center mb-8">
+                        <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100">
+                            {medicine.name}
+                        </h2>
+                        {role === 'admin' && <button
+                            onClick={handleEditClick}
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition duration-300"
+                        >
+                            Edit
+                        </button>}
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <img
+                            src={medicine.image_url}
+                            alt={medicine.name}
+                            className="w-full h-64 object-cover rounded-lg shadow-lg"
+                        />
+                        <div className="flex flex-col justify-between">
+                            <p className="text-lg text-gray-700 dark:text-gray-300">
+                                <strong>Composition: </strong> {medicine.composition}
+                            </p>
+                            <p className="text-lg text-gray-700 dark:text-gray-300">
+                                <strong>Price: </strong> ${medicine.price}
+                            </p>
+                            <p className="text-lg text-gray-700 dark:text-gray-300">
+                                <strong>Category: </strong> {medicine.category}
+                            </p>
+                            <p className="text-lg text-gray-700 dark:text-gray-300">
+                                <strong>Inventory: </strong> {medicine.inventory_quantity}
+                            </p>
+                            <p className="text-lg text-gray-700 dark:text-gray-300">
+                                <strong>Expiration Date: </strong> {medicine.exp_date}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <form
+                    onSubmit={editMedicineHandler}
+                    className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-4xl mx-auto"
+                >
+                    <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">
+                        Edit Medicine Details
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="mb-6">
+                            <label className="block text-gray-700 dark:text-gray-300 mb-2">
+                                Name:
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="mb-6">
+                            <label className="block text-gray-700 dark:text-gray-300 mb-2">
+                                Composition:
+                            </label>
+                            <input
+                                type="text"
+                                name="composition"
+                                value={formData.composition}
+                                onChange={handleInputChange}
+                                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="mb-6">
+                            <label className="block text-gray-700 dark:text-gray-300 mb-2">
+                                Price:
+                            </label>
+                            <input
+                                type="number"
+                                name="price"
+                                value={formData.price}
+                                onChange={handleInputChange}
+                                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="mb-6">
+                            <label className="block text-gray-700 dark:text-gray-300 mb-2">
+                                Category:
+                            </label>
+                            <input
+                                type="text"
+                                name="category"
+                                value={formData.category}
+                                onChange={handleInputChange}
+                                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="mb-6">
+                            <label className="block text-gray-700 dark:text-gray-300 mb-2">
+                                Inventory Quantity:
+                            </label>
+                            <input
+                                type="number"
+                                name="inventory_quantity"
+                                value={formData.inventory_quantity}
+                                onChange={handleInputChange}
+                                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500"
+                            />
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition duration-300 w-full"
+                    >
+                        Save Changes
+                    </button>
+                </form>
+            )}
+        </section>
+    );
+};
+
+export default MedicineDetail;
