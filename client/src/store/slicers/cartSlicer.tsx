@@ -6,13 +6,13 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 interface cartState {
     cartItems: [],
     totalPrice: number,
-    orders:[]
+    orders: []
 }
 
 const initialCart: cartState = {
     cartItems: [],
     totalPrice: 0,
-    orders:[]
+    orders: []
 };
 
 export const fetchCart = createAsyncThunk<any>(
@@ -34,28 +34,30 @@ export const fetchOrders = createAsyncThunk<any>(
 
 
 export const cartSlice = createSlice({
+
     name: 'cart',
     initialState: initialCart,
+
     reducers: {
         addToCart: (state: any, action: any) => {
-            state.totalPrice += action.payload.price 
-            state.cartItems = [...state.cartItems, {item:action.payload.medicine, name:action.payload.medicine.name, quantity:1}]
+            state.totalPrice += action.payload.price
+            state.cartItems = [...state.cartItems, { item: action.payload.medicine, name: action.payload.medicine.name, quantity: 1 }]
         },
 
         deleteFromCart: (state: any, action: any) => {
-             state.cartItems = state.cartItems.filter((cartItem: any) => cartItem.item._id !== action.payload.id)
+            state.cartItems = state.cartItems.filter((cartItem: any) => cartItem.item._id !== action.payload.id)
         },
-        clearCart: (state:any, action:any)=>{
+        clearCart: (state: any) => {
             state.cartItems = [],
-            state.totalPrice = 0;
+                state.totalPrice = 0;
         },
 
         updateQuantity: (state: any, action: any) => {
             console.log(action.payload);
-            if(action.payload.type === 'increment'){
+            if (action.payload.type === 'increment') {
                 state.totalPrice += (action.payload.price);
-            }else{
-                state.totalPrice =  Number(state.totalPrice) - Number(action.payload.price);
+            } else {
+                state.totalPrice = Number(state.totalPrice) - Number(action.payload.price);
             }
             state.cartItems = state.cartItems.map((cartItem: any) => cartItem.item._id === action.payload.id ? {
                 ...cartItem,
@@ -63,6 +65,7 @@ export const cartSlice = createSlice({
             } : cartItem)
         },
     },
+
     extraReducers: (builder) => {
         builder.addCase(fetchCart.fulfilled, (state: cartState, action) => {
             state.cartItems = action.payload.cartItems;
@@ -72,6 +75,7 @@ export const cartSlice = createSlice({
             state.orders = action.payload
         });
     }
+
 });
 
 export const { updateQuantity, addToCart, deleteFromCart, clearCart } = cartSlice.actions;

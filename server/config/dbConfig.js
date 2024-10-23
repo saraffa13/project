@@ -1,5 +1,7 @@
 const mongoose = require("mongoose")
 
-const connection = mongoose.connect(process.env.MONGO_URL);
+const connectToDb = (url) => {
+    mongoose.connect(url);
+}
 
-module.exports = connection;
+module.exports = connectToDb;

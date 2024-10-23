@@ -41,6 +41,7 @@ export const SignUp = () => {
         try {
             signUp(values);
             notify('Signup Successful!')
+            navigate('/login')
         } catch (error) {
             notify('Something went wrong')
             console.log('Something went wrong');
