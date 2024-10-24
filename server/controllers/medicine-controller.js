@@ -49,7 +49,9 @@ module.exports.editMedicine = async (req, res) => {
                 fetchedMedicine.price = medicine.price,
                 fetchedMedicine.inventory_quantity = medicine.inventory_quantity,
                 fetchedMedicine.composition = medicine.composition
+                fetchedMedicine.priceOff = medicine.priceOff
         }
+
         await fetchedMedicine.save();
         res.status(200).json({
             message: "Edited Successfully!"
@@ -64,11 +66,41 @@ module.exports.editMedicine = async (req, res) => {
 
 }
 
+// function getRandomTimestamp() {
+    
+//     const start = new Date(2024, 0, 1).getTime(); 
+//     const end = new Date().getTime();
+
+    
+//     const randomTimestamp = Math.floor(Math.random() * (end - start) + start);
+
+//     return randomTimestamp;
+// }
+
 module.exports.getMedicine = async (req, res) => {
 
     try {
 
         const medicine = await medicineModel.find();
+
+        
+        // medicine.forEach(async(m)=>{
+        //     const rn = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
+        //     const arr = [];
+        //     for(let i=0;i<rn;i++){
+        //         arr.push({
+        //             date:getRandomTimestamp(),
+        //             quantity:  Math.floor(Math.random() * (20 - 5 + 1)) + 5
+        //         })
+        //     }
+            
+        //     m.sales = arr;
+        //     // m.quantity_sold = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
+        //     // m.sales = [{
+        //     //     date:
+        //     // }]
+        //     await m.save()
+        // })
 
         res.status(202).json({
             message: "Here is the medicine",

@@ -7,10 +7,9 @@ import { notify, notifyError } from "../utils/helper";
 let baseURL = import.meta.env.VITE_BASE_URL;
 
 const MedicineDetail = () => {
-    
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const { medicines } = useSelector((state: any) => state.medicine);
   const { role } = useSelector((state: any) => state.auth);
 
@@ -23,7 +22,8 @@ const MedicineDetail = () => {
   useEffect(() => {
     if (!medicine) {
       setIsLoading(true);
-      axios.get(`${baseURL}/medicine/details/${id}`)
+      axios
+        .get(`${baseURL}/medicine/details/${id}`)
         .then((response) => {
           setMedicine(response.data);
         })
@@ -44,9 +44,10 @@ const MedicineDetail = () => {
     _id: medicine?._id || "",
     name: medicine?.name || "",
     composition: medicine?.composition || "",
-    price: medicine?.price || "",
+    price: Number(medicine?.price) || 0, // Ensure price is numeric
+    priceOff: Number(medicine?.priceOff) || 0, // Ensure priceOff is numeric
     category: medicine?.category || "",
-    inventory_quantity: medicine?.inventory_quantity || "",
+    inventory_quantity: Number(medicine?.inventory_quantity) || 0, // Ensure inventory quantity is numeric
   });
 
   useEffect(() => {
@@ -55,9 +56,10 @@ const MedicineDetail = () => {
         _id: medicine._id,
         name: medicine.name,
         composition: medicine.composition,
-        price: medicine.price,
+        price: Number(medicine.price), // Convert to number
+        priceOff: Number(medicine.priceOff) || 0, // Convert to number, default to 0
         category: medicine.category,
-        inventory_quantity: medicine.inventory_quantity,
+        inventory_quantity: Number(medicine.inventory_quantity), // Convert to number
       });
     }
   }, [medicine]);
@@ -87,9 +89,18 @@ const MedicineDetail = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]:
+        name === "price" || name === "priceOff" || name === "inventory_quantity"
+          ? Number(value) // Ensure the value is numeric for these fields
+          : value,
     });
   };
+
+  // Calculate discounted price based on priceOff
+  const discountedPrice =
+    formData.priceOff > 0
+      ? (formData.price - (formData.price * formData.priceOff) / 100).toFixed(2)
+      : formData.price.toFixed(2); // Safely call toFixed on price
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -127,7 +138,16 @@ const MedicineDetail = () => {
                 <strong>Composition: </strong> {medicine.composition}
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300">
-                <strong>Price: </strong> ${medicine.price}
+                <strong>Original Price: </strong> ${medicine.price}
+              </p>
+              {medicine.priceOff > 0 && (
+                <p className="text-lg text-gray-700 dark:text-gray-300">
+                  <strong>Discounted Price: </strong> ${discountedPrice}
+                </p>
+              )}
+              <p className="text-lg text-gray-700 dark:text-gray-300">
+                <strong>Discounted % (Price Off): </strong>{" "}
+                {medicine.priceOff || "N/A"}%
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300">
                 <strong>Category: </strong> {medicine.category}
@@ -136,7 +156,7 @@ const MedicineDetail = () => {
                 <strong>Inventory: </strong> {medicine.inventory_quantity}
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300">
-                <strong>Expiration Date: </strong> {medicine.exp_date}
+                <strong>Expiration Date: </strong> {new Date(medicine.exp_date).toLocaleDateString()}
               </p>
             </div>
           </div>
@@ -182,6 +202,18 @@ const MedicineDetail = () => {
                 type="number"
                 name="price"
                 value={formData.price}
+                onChange={handleInputChange}
+                className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 dark:text-gray-300 mb-2">
+                Discount Price (Price Off):
+              </label>
+              <input
+                type="number"
+                name="priceOff"
+                value={formData.priceOff}
                 onChange={handleInputChange}
                 className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-300 focus:ring focus:ring-blue-500"
               />

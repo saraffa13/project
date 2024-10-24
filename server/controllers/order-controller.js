@@ -70,6 +70,8 @@ const postOrders = async (req, res) => {
        cartData.cartItems.map(async (item)=>{
         let medicine = await medicineModel.findById(item.item._id);
         medicine.inventory_quantity -=  item.quantity;
+        medicine.quantity_sold += item.quantity;
+        medicine.sales = [...medicine.sales,{date:Date.now(),quantity:item.quantity}];
         await medicine.save();
        })
 

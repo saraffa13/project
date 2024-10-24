@@ -30,9 +30,9 @@ const CartPage = () => {
             </p>
           </div>
         )}
-        {cartItems.map((item: any) => (
-          <MedicineCard key={item._id} medicine={item.item} quantity={item.quantity} type={'cart'} />
-        ))}
+        {cartItems.map((item: any) => {
+            return  <MedicineCard key={item._id} medicine={item.item} price={item.item.price} quantity={item.quantity} type={'cart'} priceOff={item.item.priceOff} />
+        })}
       </div>
 
       <div className="mt-10 text-right">

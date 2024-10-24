@@ -9,8 +9,9 @@ interface MedicineFormData {
   name: string;
   composition: string;
   price: number;
+  priceOff: number; // Added priceOff field
   category: string;
-  image_url: File | null; // File type to handle file input
+  image_url: File | null;
   exp_date: string;
   inventory_quantity: number;
 }
@@ -22,8 +23,9 @@ const MedicineForm = () => {
     name: '',
     composition: '',
     price: 0,
+    priceOff: 0, // Initialize priceOff
     category: '',
-    image_url: null, // Image should be initialized to null
+    image_url: null,
     exp_date: '',
     inventory_quantity: 0
   });
@@ -32,9 +34,9 @@ const MedicineForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, files } = e.target as HTMLInputElement;
     if (name === 'image_url' && files && files.length > 0) {
-      setFormData({ ...formData, image_url: files[0] }); // File input case
+      setFormData({ ...formData, image_url: files[0] });
     } else {
-      setFormData({ ...formData, [name]: value }); // For other inputs
+      setFormData({ ...formData, [name]: value });
     }
   };
 
@@ -45,13 +47,14 @@ const MedicineForm = () => {
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('composition', formData.composition);
-    formDataToSend.append('price', formData.price.toString()); // Convert number to string for form data
+    formDataToSend.append('price', formData.price.toString());
+    formDataToSend.append('priceOff', formData.priceOff.toString()); // Append priceOff
     formDataToSend.append('category', formData.category);
     formDataToSend.append('exp_date', formData.exp_date);
     formDataToSend.append('inventory_quantity', formData.inventory_quantity.toString());
     
     if (formData.image_url) {
-      formDataToSend.append('image_url', formData.image_url); // Append the file to the form data
+      formDataToSend.append('image_url', formData.image_url);
     }
 
     try {
@@ -108,6 +111,19 @@ const MedicineForm = () => {
             id="price"
             name="price"
             value={formData.price}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="priceOff" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Discount Price (Price Off):</label>
+          <input
+            type="number"
+            id="priceOff"
+            name="priceOff"
+            value={formData.priceOff}
             onChange={handleChange}
             required
             className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"

@@ -42,7 +42,7 @@ const addToCart = async (req, res) => {
     try {
         let cartData = await cartModel.findById(cartId);
         cartData.cartItems = [...cartData.cartItems, { item: medicineId, name, quantity: 1 }];
-        cartData.totalPrice += price;
+        cartData.totalPrice += Number(price);
 
         await cartData.save();
 
@@ -105,7 +105,7 @@ const updateQuantity = async (req, res) => {
 const deleteItemFromCart = async (req, res) => {
 
     const user = req.user;
-    const { medicineId } = req.body;
+    const { medicineId, price, quantity } = req.body;
 
     if (!user) {
         return res.status(401).json({ message: 'You must be logged in to view your cart' })
@@ -120,6 +120,7 @@ const deleteItemFromCart = async (req, res) => {
         const newCartItems = cartData.cartItems.filter((cartItem) => cartItem.item != medicineId)
 
         cartData.cartItems = [...newCartItems]
+        cartData.totalPrice = cartData.totalPrice - (price*quantity);
 
         await cartData.save();
 

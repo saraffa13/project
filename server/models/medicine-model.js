@@ -1,5 +1,18 @@
 const mongoose = require('mongoose');
 
+const salesSchema = new mongoose.Schema({
+  date: {
+    type: Date,
+    default: Date.now, 
+  },
+  quantity: {
+    type: Number,
+    required: true, 
+  },
+});
+
+
+
 const medicineSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -28,7 +41,15 @@ const medicineSchema = new mongoose.Schema({
     inventory_quantity:{
         type:Number,
         required:true
-    }
+    },
+    priceOff:{
+        type:Number,
+        min:0,
+    },
+    quantity_sold:{
+        type:Number
+    },
+    sales:[salesSchema]
 }, { timestamps: true, versionKey: false });
 
 

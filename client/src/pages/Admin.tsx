@@ -13,6 +13,10 @@ const Admin = () => {
                 <Link to="/admin/users" className="w-64 p-4 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:bg-green-600 dark:hover:bg-green-700">
                     Users
                 </Link>
+
+                <Link to="/admin/sales" className="w-64 p-4 bg-red-500 text-white rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:bg-green-600 dark:hover:bg-green-700">
+                    Data
+                </Link>
             </div>
         </div>
     );

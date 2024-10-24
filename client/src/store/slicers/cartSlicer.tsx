@@ -40,11 +40,12 @@ export const cartSlice = createSlice({
 
     reducers: {
         addToCart: (state: any, action: any) => {
-            state.totalPrice += action.payload.price
+            state.totalPrice += Number(action.payload.price)
             state.cartItems = [...state.cartItems, { item: action.payload.medicine, name: action.payload.medicine.name, quantity: 1 }]
         },
 
         deleteFromCart: (state: any, action: any) => {
+            state.totalPrice-=  action.payload.price*action.payload.quantity; 
             state.cartItems = state.cartItems.filter((cartItem: any) => cartItem.item._id !== action.payload.id)
         },
         clearCart: (state: any) => {
@@ -55,7 +56,7 @@ export const cartSlice = createSlice({
         updateQuantity: (state: any, action: any) => {
             console.log(action.payload);
             if (action.payload.type === 'increment') {
-                state.totalPrice += (action.payload.price);
+                state.totalPrice += Number(action.payload.price);
             } else {
                 state.totalPrice = Number(state.totalPrice) - Number(action.payload.price);
             }

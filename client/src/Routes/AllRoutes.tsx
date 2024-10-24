@@ -19,6 +19,7 @@ import MedicineLayout from "../pages/MedicineLayout"
 import NotFound from "../pages/NotFound"
 import Authentication from "../HOC/Authentication"
 import AdminAuth from "../HOC/AdminAuth"
+import MedicineSalesCharts from "../pages/MedicinesSalesChart"
 
 const AllRoutes = () => {
 
@@ -75,6 +76,10 @@ const AllRoutes = () => {
                 {
                     path: '/admin/users',
                     element: <Authentication><AdminAuth><AdminUsers /></AdminAuth> </Authentication>
+                },
+                {
+                    path: '/admin/sales',
+                    element: <Authentication><AdminAuth><MedicineSalesCharts /></AdminAuth> </Authentication>
                 },
                 {
                     path: '/orders',
