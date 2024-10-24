@@ -2,7 +2,6 @@ const dotenv = require('dotenv').config();
 const express = require("express");
 const cors = require('cors')
 
-const connection = require("./config/dbConfig");
 const userRouter = require('./routes/user-routes');
 const cartRouter = require('./routes/cart-routes');
 const medicineRouter = require('./routes/medicine-routes');
@@ -23,10 +22,9 @@ app.use(cookieParser());
 const corsOptions = {
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization '],
     credentials: true,
 };
-1
 
 app.use(cors(corsOptions));
 

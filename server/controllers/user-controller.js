@@ -13,12 +13,13 @@ module.exports.registerUser = async (req, res) => {
 
     try {
 
-        const existingUser = await userModel.find({ email })[0];
+        const existingUser = await userModel.findOne({ email });
+
         if (existingUser) {
-            return res.status(401).json({ message: 'User already registered' })
+            return res.status(409).json({ message: 'User already Registered!'})
         }
 
-        const hashedPassword = await bcrypt.hash(password, 5)
+        const hashedPassword = await bcrypt.hash(password, 5);
 
         const newCart = new cartModel({
             cartItems: [],
@@ -61,15 +62,12 @@ module.exports.loginUser = async (req, res) => {
     try {
 
         const existingUser = await userModel.findOne({ email });
-
         if (!existingUser) {
             return res.status(404).json({ message: "User not found! Need to register" })
         }
 
         const matchPassword = await bcrypt.compare(password, existingUser.password);
-
         if (matchPassword) {
-
             const token = await jwt.sign({
                 _id: existingUser._id,
                 role: existingUser.role,
@@ -111,9 +109,9 @@ module.exports.logoutUser = async (req, res) => {
 module.exports.getUser = async (req, res) => {
 
     const user = req.user;
-    // console.log(user);
+
     try {
-        
+
         if (!user) {
             return res.status(404).json({ message: "User not found!" })
         }
@@ -124,7 +122,7 @@ module.exports.getUser = async (req, res) => {
         })
 
     }
-     catch (error) {
+    catch (error) {
         console.error('Something went wrong:', error);
         res.status(500).json({
             message: 'Couldn\'t login! Something went wrong!',
@@ -137,29 +135,30 @@ module.exports.getUser = async (req, res) => {
 module.exports.getAllUsers = async (req, res) => {
 
     const user = req.user;
-    
+
     try {
 
         if (!user) {
-            return res.status(404).json({ message: "User not found!" })
+            return res.status(404).json({ message: "Unauthorised Access!" })
         }
-        
-        if(user.role === 'user'){
+
+        if (user.role === 'user') {
             return res.status(200).json({
-                message: "User!",
+                message: "Here are the list of Users!",
                 data: []
             })
-        }else{
+        } else {
             const user = await userModel.find();
             return res.status(200).json({
-                message: "User!",
+                message: "Here are the list of Users!",
                 data: user
             })
         }
 
 
     }
-     catch (error) {
+    
+    catch (error) {
         console.error('Something went wrong:', error);
         res.status(500).json({
             message: 'Couldn\'t login! Something went wrong!',
@@ -196,5 +195,3 @@ module.exports.deleteUser = async (req, res) => {
     }
 
 }
-
-

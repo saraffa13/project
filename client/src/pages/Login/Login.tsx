@@ -46,11 +46,10 @@ export const Login = () => {
 			navigate('/')
             notify('Login Successful!');
         } catch (error) {
-            notify('Something went wrong');
-            console.log('Something went wrong');
+            notify('Incorrect login credentials. Please try again.');
         } finally {
             setSubmitting(false);
-            // resetForm();
+            resetForm();
         }
     };
 

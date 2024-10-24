@@ -1,6 +1,7 @@
 const cartModel = require("../models/cart-model");
 
 const getCartItems = async (req, res) => {
+    
     const user = req.user;
     const cartId = user.cart;
 
@@ -16,12 +17,14 @@ const getCartItems = async (req, res) => {
             message: "Cart Data successfully retrived",
             data: cartData
         })
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
             message: "Something went wrong!"
         })
     }
+
 }
 
 const addToCart = async (req, res) => {
@@ -59,10 +62,10 @@ const addToCart = async (req, res) => {
 const updateQuantity = async (req, res) => {
 
     const user = req.user;
-    const { medicineId, type , price} = req.body;
+    const { medicineId, type, price } = req.body;
 
     if (!user) {
-        return res.status(401).json({ message: 'You must be logged in to view your cart' })
+        return res.status(401).json({ message: 'You must be logged in to view your cart!' })
     }
 
     let cartId = user.cart;
@@ -82,12 +85,11 @@ const updateQuantity = async (req, res) => {
                 return cartItem;
             }
         })
-        
+
         cartData.totalPrice = (type === 'increment' ? + 1 : -1) * price + cartData.totalPrice;
         cartData.totalPrice.toFixed(2);
 
         await cartData.save();
-
 
         res.status(200).json({
             message: "Item added to the cart!",
@@ -114,7 +116,6 @@ const deleteItemFromCart = async (req, res) => {
     try {
 
         const cartData = await cartModel.findById(cartId);
-
 
         const newCartItems = cartData.cartItems.filter((cartItem) => cartItem.item != medicineId)
 

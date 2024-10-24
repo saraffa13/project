@@ -1,25 +1,35 @@
 const medicineModel = require("../models/medicine-model")
+const cloudinary = require("cloudinary")
+
+cloudinary.config({
+    cloud_name: 'ddvef89nz',
+    api_key: '348469487735628',
+    api_secret: 'wVC6nRNvO46N0EaM58YKjF2JjNc'
+});
 
 module.exports.createMedicine = async (req, res) => {
 
-    const { medicineList } = req.body
+    const medicine  = req.body
 
     try {
-        medicineList.map(async (medicine) => {
-            const newMedicine = new medicineModel({ ...medicine, 'exp_date': new Date(medicine.exp_date).getTime() })
-            await newMedicine.save()
-        })
+        let imageUrl = null;
 
-        const medicine = await medicineModel.find();
+        if (req.file) {
+            const fileResponse = await cloudinary.uploader.upload(req.file.path, { folder: 'medicineImg' });
+            imageUrl = fileResponse.secure_url;
+        }
+        const newMedicine = new medicineModel({ ...medicine, image_url: imageUrl, 'exp_date': new Date(medicine.exp_date).getTime() })
+        await newMedicine.save()
 
 
         res.status(202).json({
             message: "Medicines created successfully",
-            data: medicine
+            data: newMedicine
         })
 
 
     } catch (error) {
+        console.log(error);
         res.status(404).json({
             message: "Couldn't create medicine. Something went wrong!"
         })
@@ -32,13 +42,13 @@ module.exports.editMedicine = async (req, res) => {
     const { medicine } = req.body;
 
     try {
-    
+
         const fetchedMedicine = await medicineModel.findById(medicine._id);
         if (fetchedMedicine) {
             fetchedMedicine.name = medicine.name,
-            fetchedMedicine.price = medicine.price,
-            fetchedMedicine.inventory_quantity = medicine.inventory_quantity,
-            fetchedMedicine.composition = medicine.composition
+                fetchedMedicine.price = medicine.price,
+                fetchedMedicine.inventory_quantity = medicine.inventory_quantity,
+                fetchedMedicine.composition = medicine.composition
         }
         await fetchedMedicine.save();
         res.status(200).json({

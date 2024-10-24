@@ -1,58 +1,83 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { notify, notifyError } from '../utils/helper';
+import { useNavigate } from 'react-router-dom';
+
 let baseURL = import.meta.env.VITE_BASE_URL;
-
-
 
 interface MedicineFormData {
   name: string;
   composition: string;
   price: number;
   category: string;
-  image_url: string;
+  image_url: File | null; // File type to handle file input
   exp_date: string;
   inventory_quantity: number;
 }
 
-const MedicineForm= () => {
+const MedicineForm = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<MedicineFormData>({
     name: '',
     composition: '',
     price: 0,
     category: '',
-    image_url: '',
+    image_url: null, // Image should be initialized to null
     exp_date: '',
     inventory_quantity: 0
   });
 
+  // Handling input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target as HTMLInputElement;
+    if (name === 'image_url' && files && files.length > 0) {
+      setFormData({ ...formData, image_url: files[0] }); // File input case
+    } else {
+      setFormData({ ...formData, [name]: value }); // For other inputs
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newFormData = [];
-    newFormData.push(formData)
-    try {
-      const response = await axios.post(`${baseURL}/medicine/create-medicine`, {
-        medicineList:newFormData
-      }, {withCredentials:true});
-      notify("Added Successfully!");
-    } catch (error) {
-      console.error("Error:", error);
-      notifyError("Something went Wrong! Can't add the medicine")
-      throw error;
+
+    // Prepare form data for multipart upload
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('composition', formData.composition);
+    formDataToSend.append('price', formData.price.toString()); // Convert number to string for form data
+    formDataToSend.append('category', formData.category);
+    formDataToSend.append('exp_date', formData.exp_date);
+    formDataToSend.append('inventory_quantity', formData.inventory_quantity.toString());
+    
+    if (formData.image_url) {
+      formDataToSend.append('image_url', formData.image_url); // Append the file to the form data
     }
 
+    try {
+      await axios.post(`${baseURL}/medicine/create-medicine`, formDataToSend, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      notify('Added Successfully!');
+    } catch (error) {
+      console.error('Error:', error);
+      notifyError("Something went wrong! Can't add the medicine.");
+      throw error;
+    } finally {
+      navigate('/medicines');
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-black dark:text-white p-8">
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-6">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center p-8 transition-colors duration-500">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-10 max-w-lg w-full space-y-8">
+        <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white">Add New Medicine</h2>
+
         <div>
-          <label htmlFor="name" className="block font-medium mb-2">Medicine Name:</label>
+          <label htmlFor="name" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Medicine Name:</label>
           <input
             type="text"
             id="name"
@@ -60,24 +85,24 @@ const MedicineForm= () => {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
         </div>
 
         <div>
-          <label htmlFor="composition" className="block font-medium mb-2">Composition:</label>
+          <label htmlFor="composition" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Composition:</label>
           <textarea
             id="composition"
             name="composition"
             value={formData.composition}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
         </div>
 
         <div>
-          <label htmlFor="price" className="block font-medium mb-2">Price:</label>
+          <label htmlFor="price" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Price:</label>
           <input
             type="number"
             id="price"
@@ -85,12 +110,12 @@ const MedicineForm= () => {
             value={formData.price}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
         </div>
 
         <div>
-          <label htmlFor="category" className="block font-medium mb-2">Category:</label>
+          <label htmlFor="category" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Category:</label>
           <input
             type="text"
             id="category"
@@ -98,24 +123,23 @@ const MedicineForm= () => {
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
         </div>
 
         <div>
-          <label htmlFor="image_url" className="block font-medium mb-2">Image URL:</label>
+          <label htmlFor="image_url" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Image URL:</label>
           <input
-            type="url"
+            type="file"
             id="image_url"
             name="image_url"
-            value={formData.image_url}
             onChange={handleChange}
-            className="w-full p-3 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
         </div>
 
         <div>
-          <label htmlFor="exp_date" className="block font-medium mb-2">Expiry Date:</label>
+          <label htmlFor="exp_date" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Expiry Date:</label>
           <input
             type="date"
             id="exp_date"
@@ -123,12 +147,12 @@ const MedicineForm= () => {
             value={formData.exp_date}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
         </div>
 
         <div>
-          <label htmlFor="inventory_quantity" className="block font-medium mb-2">Inventory Quantity:</label>
+          <label htmlFor="inventory_quantity" className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">Inventory Quantity:</label>
           <input
             type="number"
             id="inventory_quantity"
@@ -136,13 +160,13 @@ const MedicineForm= () => {
             value={formData.inventory_quantity}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full py-3 px-4 bg-green-600 text-white rounded hover:bg-green-700 transition"
+          className="w-full py-3 px-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-transform transform hover:scale-105 duration-300 font-semibold"
         >
           Add Medicine
         </button>

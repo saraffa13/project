@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMedicines } from "../store/slicers/medicineSlicer";
 import MedicineCard from "../components/MedicineCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Medicine = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState<any>('All');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,15 +17,16 @@ const Medicine = () => {
   const navigate = useNavigate();
 
 
-  useEffect(()=>{
-    if('type' in params){
+  useEffect(() => {
+    if ('type' in params) {
       console.log(params.type);
       setSelectedCategory(params.type);
-    }    
-  },[])
+    }
+  }, [])
 
   const { medicines } = useSelector((state: any) => state.medicine);
   const { cartItems } = useSelector((state: any) => state.cart);
+  const { role } = useSelector((state: any) => state.auth);
 
 
   const categories = ['All', ...new Set(medicines.map((medicine: any) => medicine.category))];
@@ -61,7 +62,7 @@ const Medicine = () => {
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            {categories.map((category) => (
+            {categories.map((category:any) => (
               <option key={category} value={category}>
                 {category}
               </option>
@@ -70,13 +71,24 @@ const Medicine = () => {
         </div>
       </div>
 
-      <div className="flex justify-end mb-6">
-        <button
-          onClick={clearFilters}
-          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
-        >
-          Clear Filters
-        </button>
+      <div className="flex justify-between">
+        {role === 'admin' && <div className="flex justify-end mb-6">
+          <Link to="/admin/addMedicine"
+            onClick={clearFilters}
+            className="bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-600"
+          >
+            Add Medicines
+          </Link>
+        </div>}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={clearFilters}
+            className="bg-red-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-red-600"
+          >
+            Clear Filters
+          </button>
+        </div>
+
       </div>
 
       <div className="flex flex-wrap">

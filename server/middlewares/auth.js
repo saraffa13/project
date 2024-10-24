@@ -31,6 +31,7 @@ const auth = async (req, res, next) => {
     checkBlacklistedToken(req, res, async () => {
 
         const token = req.cookies.token;
+
         if (!token) {
             return res.status(401).json({
                 message: "Access Denied! Please Login"

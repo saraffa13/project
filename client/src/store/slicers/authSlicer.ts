@@ -6,7 +6,6 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 
 interface UserState {
     email: string;
-    password: string;
     loggedIn: boolean;
     language:string,
     languageKeyWords:any,
@@ -14,10 +13,8 @@ interface UserState {
     users:any,
 }
 
-
 const initialUser: UserState = {
     email: "",
-    password: "",
     loggedIn: false,
     language:"english",
     languageKeyWords:{},
@@ -43,7 +40,7 @@ export const checkUserName = createAsyncThunk<any>(
         const loggedIn = await localStorage.getItem('loggedIn');
         if(loggedIn && loggedIn === 'true'){
             const response = await axios.get(`${baseURL}/user/get-user`, { withCredentials: true })
-            console.log(response.data.data);
+            localStorage.setItem('role', response.data.data.role);
             return response.data.data
 
         }
@@ -75,13 +72,13 @@ export const authSlice = createSlice({
     initialState: initialUser,
     reducers: {
         login: (state, action: PayloadAction<{ email: string; password: string }>) => {
+            localStorage.setItem('loggedIn','true')
             state.email = action.payload.email;
-            state.password = action.payload.password;
             state.loggedIn = true;
         },
         logout: (state) => {
+            localStorage.setItem('loggedIn','false')
             state.email = "";
-            state.password = "";
             state.loggedIn = false;
         },
         deleteUser: (state, action) => {

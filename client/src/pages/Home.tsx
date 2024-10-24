@@ -56,7 +56,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-0">
           <h2 className="text-3xl font-bold text-center mb-12">Popular Categories</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {categories.map((category, index) => (
+            {categories.map((category:any, index) => (
               <Link key={category} to={`medicines/${category}`} className="text-center group">
                 <img
                   src={ctg[index]}
@@ -74,7 +74,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-0">
           <h2 className="text-3xl font-bold text-center mb-12">Featured Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {medicines.slice(0,3).map((product) => (
+            {medicines.slice(0,3).map((product:any) => (
               <Link key={product.name} to={product.link} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
                 <img src={product.image_url} alt={product.name} className="w-full h-48 object-cover mb-6 rounded-t-lg" />
                 <div className="text-center">

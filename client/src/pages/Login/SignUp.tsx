@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { notify } from '../../utils/helper';
+import { notify, notifyError } from '../../utils/helper';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -39,7 +39,7 @@ export const SignUp = () => {
 
     const formSubmitHandler = async (values: FormValues, { setSubmitting, resetForm }: FormikHelpers<FormValues>) => {
         try {
-            signUp(values);
+            await signUp(values);
             notify('Signup Successful!')
             navigate('/login')
         } catch (error) {
