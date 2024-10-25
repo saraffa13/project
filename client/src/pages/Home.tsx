@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-
 const ctg = [
   'https://images.unsplash.com/photo-1549477754-350cf45a1772?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-   'https://images.unsplash.com/photo-1577401132921-cb39bb0adcff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  'https://images.unsplash.com/photo-1577401132921-cb39bb0adcff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   'https://plus.unsplash.com/premium_photo-1670381252200-873b6e3c6363?q=80&w=1867&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
 ];
-
-
 
 const backgroundImages = [
   'https://images.unsplash.com/photo-1674702727317-d29b2788dc4a?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -22,20 +19,19 @@ const backgroundImages = [
 const Home = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const {medicines} = useSelector((state:any)=>state.medicine)
-  const categories = [...new Set(medicines.map((medicine: any) => medicine.category))].slice(0,4);
-  
+  const { medicines } = useSelector((state: any) => state.medicine)
+  const categories = [...new Set(medicines.map((medicine: any) => medicine.category))].slice(0, 4);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
     }, 3000); 
-
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="bg-gray-50 min-h-screen">
-
+      
       <section
         className="relative w-full h-[600px] bg-cover bg-center transition-all duration-1000"
         style={{ backgroundImage: `url(${backgroundImages[currentImageIndex]})` }}
@@ -56,7 +52,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-0">
           <h2 className="text-3xl font-bold text-center mb-12">Popular Categories</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {categories.map((category:any, index) => (
+            {categories.map((category: any, index) => (
               <Link key={category} to={`medicines/${category}`} className="text-center group">
                 <img
                   src={ctg[index]}
@@ -74,7 +70,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-0">
           <h2 className="text-3xl font-bold text-center mb-12">Featured Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {medicines.slice(0,3).map((product:any) => (
+            {medicines.slice(0, 3).map((product: any) => (
               <Link key={product.name} to={product.link} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
                 <img src={product.image_url} alt={product.name} className="w-full h-48 object-cover mb-6 rounded-t-lg" />
                 <div className="text-center">

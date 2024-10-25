@@ -16,12 +16,22 @@ const checkBlacklistedToken = async (req, res, next) => {
             res.clearCookie('token')
             return res.status(401).send('Token has been invalidated.');
         }
-
-        next();
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+            if (err) {
+                if (err.name === 'TokenExpiredError') {
+                    res.clearCookie('token');
+                    flag = 1;
+                    return res.status(401).send('Token has expired.');
+                }
+                return res.status(401).send('Invalid token.');
+            }           
+            next();
+        });
+       
 
     } catch (error) {
         console.error('Token validation error:', error);
-        res.status(401).send('Invalid token.');
+        return res.status(401).send('Invalid token.');
     }
 
 };
@@ -48,8 +58,7 @@ const auth = async (req, res, next) => {
             })
         }
 
-        req.user = latestUser;
-        
+        req.user = latestUser;        
         next();
 
     })

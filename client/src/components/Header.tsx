@@ -15,7 +15,6 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 const Header = () => {
 
     const [darkMode, setDarkMode] = useLocalStorage<boolean>('dark', false);
-    const [signIn, setSignIn] = useLocalStorage<boolean>('loggedIn', false);
 
     const { loggedIn, languageKeyWords, language, role: admin } = useSelector((state: any) => state.auth);
     const { cartItems } = useSelector((state: any) => state.cart);
@@ -26,7 +25,7 @@ const Header = () => {
     const logoutHandler = async () => {
         try {
             const response = await axios.get(`${baseURL}/user/logout`, { withCredentials: true });
-            setSignIn(false);
+            localStorage.setItem('loggedIn', 'false')
             navigate('/login');
             dispatch(logout());
             dispatch(clearCart());
@@ -43,7 +42,6 @@ const Header = () => {
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
-        document.documentElement.classList.toggle('dark', !darkMode);
     };
 
     const languageChangeHandler = async (language: string) => {
@@ -52,7 +50,7 @@ const Header = () => {
     };
 
     return (
-        <div className="shadow-lg dark:border-b ">
+        <div className="shadow-lg dark:border-b sticky top-0 z-50">
             <nav className="bg-white border-gray-200 dark:bg-gray-900">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
@@ -124,6 +122,7 @@ const Header = () => {
                             </svg>
                         </button>
                     </div>
+
                     <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-language">
                         <ul className="flex flex-col font-bold p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 ">
                             <li>

@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+
 import { notify, notifyError } from "../utils/helper";
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
 const MedicineDetail = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
+    
   const { medicines } = useSelector((state: any) => state.medicine);
   const { role } = useSelector((state: any) => state.auth);
-
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
+  const [isLoading, setIsLoading] = useState(false);
   const [medicine, setMedicine] = useState(() => {
     return medicines?.find((medicine: any) => medicine._id === id);
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+
+
 
   useEffect(() => {
     if (!medicine) {
@@ -44,10 +47,10 @@ const MedicineDetail = () => {
     _id: medicine?._id || "",
     name: medicine?.name || "",
     composition: medicine?.composition || "",
-    price: Number(medicine?.price) || 0, // Ensure price is numeric
-    priceOff: Number(medicine?.priceOff) || 0, // Ensure priceOff is numeric
+    price: Number(medicine?.price) || 0,
+    priceOff: Number(medicine?.priceOff) || 0, 
     category: medicine?.category || "",
-    inventory_quantity: Number(medicine?.inventory_quantity) || 0, // Ensure inventory quantity is numeric
+    inventory_quantity: Number(medicine?.inventory_quantity) || 0, 
   });
 
   useEffect(() => {
@@ -56,10 +59,10 @@ const MedicineDetail = () => {
         _id: medicine._id,
         name: medicine.name,
         composition: medicine.composition,
-        price: Number(medicine.price), // Convert to number
-        priceOff: Number(medicine.priceOff) || 0, // Convert to number, default to 0
+        price: Number(medicine.price), 
+        priceOff: Number(medicine.priceOff) || 0, 
         category: medicine.category,
-        inventory_quantity: Number(medicine.inventory_quantity), // Convert to number
+        inventory_quantity: Number(medicine.inventory_quantity), 
       });
     }
   }, [medicine]);
@@ -91,16 +94,16 @@ const MedicineDetail = () => {
       ...formData,
       [name]:
         name === "price" || name === "priceOff" || name === "inventory_quantity"
-          ? Number(value) // Ensure the value is numeric for these fields
+          ? Number(value) 
           : value,
     });
   };
 
-  // Calculate discounted price based on priceOff
+  
   const discountedPrice =
     formData.priceOff > 0
       ? (formData.price - (formData.price * formData.priceOff) / 100).toFixed(2)
-      : formData.price.toFixed(2); // Safely call toFixed on price
+      : formData.price.toFixed(2); 
 
   if (isLoading) {
     return <div>Loading...</div>;

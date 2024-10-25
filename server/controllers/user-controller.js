@@ -16,7 +16,7 @@ module.exports.registerUser = async (req, res) => {
         const existingUser = await userModel.findOne({ email });
 
         if (existingUser) {
-            return res.status(409).json({ message: 'User already Registered!'})
+            return res.status(409).json({ message: 'User already Registered!' })
         }
 
         const hashedPassword = await bcrypt.hash(password, 5);
@@ -157,7 +157,7 @@ module.exports.getAllUsers = async (req, res) => {
 
 
     }
-    
+
     catch (error) {
         console.error('Something went wrong:', error);
         res.status(500).json({

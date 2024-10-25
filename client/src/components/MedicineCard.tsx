@@ -11,6 +11,7 @@ import { notifyError } from "../utils/helper";
 let baseURL = import.meta.env.VITE_BASE_URL;
 
 const MedicineCard = ({ medicine, type, quantity, price, priceOff }: any) => {
+
   const { cartItems } = useSelector((state: any) => state.cart);
   const { loggedIn, role } = useSelector((state: any) => state.auth);
 
@@ -31,7 +32,6 @@ const MedicineCard = ({ medicine, type, quantity, price, priceOff }: any) => {
         { medicineId, name, price },
         { withCredentials: true }
       );
-
       dispatch(addToCart({ medicine, price }));
     } catch (error) {
       notifyError("Failed to add medicine to cart");
@@ -68,11 +68,9 @@ const MedicineCard = ({ medicine, type, quantity, price, priceOff }: any) => {
     }
   };
 
-  // Provide default value for price to avoid undefined issues
   const displayedPrice = price || 0;
   const discountedPrice = priceOff > 0 ? (displayedPrice - (displayedPrice * priceOff / 100)).toFixed(2) : displayedPrice.toFixed(2);
 
-  // Calculate total prices based on quantity if quantity > 0
   const totalDisplayedPrice = quantity > 0 ? (displayedPrice * quantity).toFixed(2) : displayedPrice.toFixed(2);
   const totalDiscountedPrice = quantity > 0 ? (discountedPrice * quantity).toFixed(2) : discountedPrice;
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -8,7 +7,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const MedicineSalesCharts = () => {
   
-  const { medicines } = useSelector((state) => state.medicine);
+  const { medicines } = useSelector((state:any) => state.medicine);
 
   
   if (!medicines || medicines.length === 0) {
@@ -17,20 +16,20 @@ const MedicineSalesCharts = () => {
 
   return (
     <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {medicines.map((medicine) => {
+      {medicines.map((medicine:any) => {
         
         if (medicine.sales && medicine.sales.length > 0) {
-          const salesData = medicine.sales.map(sale => ({
+          const salesData = medicine.sales.map((sale:any) => ({
             date: new Date(sale.date).toLocaleDateString(),
             quantity: sale.quantity
           }));
 
           const chartData = {
-            labels: salesData.map(sale => sale.date),
+            labels: salesData.map((sale:any)=> sale.date),
             datasets: [
               {
                 label: `${medicine.name} - Quantity Sold`,
-                data: salesData.map(sale => sale.quantity),
+                data: salesData.map((sale:any) => sale.quantity),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
