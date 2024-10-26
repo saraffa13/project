@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const medicineModel = require("../models/medicine-model")
 const cloudinary = require("cloudinary")
 
@@ -9,7 +10,12 @@ cloudinary.config({
 
 module.exports.createMedicine = async (req, res) => {
 
-    const medicine  = req.body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const medicine = req.body
 
     try {
         let imageUrl = null;
@@ -46,10 +52,11 @@ module.exports.editMedicine = async (req, res) => {
         const fetchedMedicine = await medicineModel.findById(medicine._id);
         if (fetchedMedicine) {
             fetchedMedicine.name = medicine.name,
-                fetchedMedicine.price = medicine.price,
-                fetchedMedicine.inventory_quantity = medicine.inventory_quantity,
-                fetchedMedicine.composition = medicine.composition
-                fetchedMedicine.priceOff = medicine.priceOff
+            fetchedMedicine.price = medicine.price,
+            fetchedMedicine.inventory_quantity = medicine.inventory_quantity,
+            fetchedMedicine.composition = medicine.composition
+            fetchedMedicine.priceOff = medicine.priceOff
+            fetchedMedicine.category = medicine.category
         }
 
         await fetchedMedicine.save();
@@ -83,26 +90,3 @@ module.exports.getMedicine = async (req, res) => {
         })
     }
 }
-
-// module.exports.getMedicineSortedByOffers = async (req, res) => {
-
-//     const  { criteria, value } = req.body;
-
-//     try {
-
-//         const medicine = await medicineModel.find().sort({criteria: value});
-//         console.log(medicine);
-
-        
-//         res.status(202).json({
-//             message: "Sorted Medicine Data!",
-//             data: medicine
-//         })
-
-//     } catch (error) {
-//         res.status(404).json({
-//             message: "Couldn't get the medicine. Something went wrong!"
-//         })
-//     }
-
-// }

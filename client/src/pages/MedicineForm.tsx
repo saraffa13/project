@@ -43,12 +43,11 @@ const MedicineForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Prepare form data for multipart upload
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('composition', formData.composition);
     formDataToSend.append('price', formData.price.toString());
-    formDataToSend.append('priceOff', formData.priceOff.toString()); // Append priceOff
+    formDataToSend.append('priceOff', formData.priceOff.toString()); 
     formDataToSend.append('category', formData.category);
     formDataToSend.append('exp_date', formData.exp_date);
     formDataToSend.append('inventory_quantity', formData.inventory_quantity.toString());

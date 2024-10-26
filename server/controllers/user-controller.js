@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 
 const userModel = require("../models/user-model");
 const blackListTokenModel = require('../models/blacklist-token-model');
@@ -8,6 +9,11 @@ const orderModel = require('../models/orders-model');
 
 
 module.exports.registerUser = async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     const { name, email, password, phoneNumber, role, gender } = req.body;
 
@@ -56,6 +62,13 @@ module.exports.registerUser = async (req, res) => {
 }
 
 module.exports.loginUser = async (req, res) => {
+
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
 
     const { email, password } = req.body;
 
@@ -170,6 +183,12 @@ module.exports.getAllUsers = async (req, res) => {
 
 
 module.exports.deleteUser = async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
 
     const { userId } = req.body;
 

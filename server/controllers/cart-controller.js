@@ -1,7 +1,8 @@
+const { validationResult } = require("express-validator");
 const cartModel = require("../models/cart-model");
 
 const getCartItems = async (req, res) => {
-    
+
     const user = req.user;
     const cartId = user.cart;
 
@@ -17,7 +18,7 @@ const getCartItems = async (req, res) => {
             message: "Cart Data successfully retrived",
             data: cartData
         })
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -28,6 +29,12 @@ const getCartItems = async (req, res) => {
 }
 
 const addToCart = async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
 
     const user = req.user;
     const { medicineId, name, price } = req.body;
@@ -61,6 +68,11 @@ const addToCart = async (req, res) => {
 
 const updateQuantity = async (req, res) => {
 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
     const user = req.user;
     const { medicineId, type, price } = req.body;
 
@@ -74,8 +86,11 @@ const updateQuantity = async (req, res) => {
 
         let cartData = await cartModel.findById(cartId);
 
+        let flag = 0;
+
         cartData.cartItems = cartData.cartItems.map((cartItem) => {
             if (cartItem.item == medicineId) {
+                flag = 1;
                 return {
                     item: cartItem.item,
                     name: cartItem.name,
@@ -86,8 +101,10 @@ const updateQuantity = async (req, res) => {
             }
         })
 
-        cartData.totalPrice = (type === 'increment' ? + 1 : -1) * price + cartData.totalPrice;
-        cartData.totalPrice.toFixed(2);
+        if (flag) {
+            cartData.totalPrice = (type === 'increment' ? + 1 : -1) * price + cartData.totalPrice;
+            cartData.totalPrice.toFixed(2);
+        }
 
         await cartData.save();
 
@@ -97,6 +114,7 @@ const updateQuantity = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error);
         res.status(501).json({
             message: "Item\'s quantity couldn\'t be updated"
         })
@@ -120,7 +138,7 @@ const deleteItemFromCart = async (req, res) => {
         const newCartItems = cartData.cartItems.filter((cartItem) => cartItem.item != medicineId)
 
         cartData.cartItems = [...newCartItems]
-        cartData.totalPrice = cartData.totalPrice - (price*quantity);
+        cartData.totalPrice = cartData.totalPrice - (price * quantity);
 
         await cartData.save();
 
