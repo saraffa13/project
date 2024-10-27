@@ -1,6 +1,6 @@
 const express = require('express');
-const { registerUser, loginUser, logoutUser, deleteUser, getUser, getAllUsers } = require('../controllers/user-controller');
-const { adminAuth, auth } = require('../middlewares/auth');
+const { registerUser, loginUser, logoutUser, deleteUser, getUser, getAllUsers, confirmEmail, handleActivation, removeFromBlackList, blacklistUser, forgotPassword, changePassword, getNotification, markNotificationAsRead } = require('../controllers/user-controller');
+const { adminAuth, auth, isActive } = require('../middlewares/auth');
 const { check } = require('express-validator');
 
 const userRouter = express.Router();
@@ -29,20 +29,73 @@ userRouter.post('/register', [
 
 ], registerUser);
 
+userRouter.get('/confirm-email/:token', confirmEmail);
+
 userRouter.get('/get-user', auth, getUser);
 
 userRouter.get('/get-all-users', auth, getAllUsers);
 
+userRouter.post('/forgot-password/', [
+    check('email')
+        .isEmail().withMessage('Please enter a valid email!')
+], forgotPassword);
+
+userRouter.post('/change-password/', [
+    check('newPassword')
+        .notEmpty().withMessage("Password is required!")
+        .isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
+    check('confirmationToken')
+        .notEmpty().withMessage("Token is required!")
+], changePassword);
+
+userRouter.get('/notification', [
+    auth
+], getNotification);
+
+userRouter.post('/notification/markAsRead', [
+    auth
+], markNotificationAsRead);
+
 userRouter.post(
     '/login',
     [
+        isActive,
         check('email')
             .isEmail().withMessage('Please enter a valid email!'),
-            
+
         check('password')
             .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
     ],
     loginUser
+);
+
+userRouter.post(
+    '/handleActivation',
+    [
+        check('userId').notEmpty().withMessage("User Id can't be empty")
+            .isMongoId().withMessage('Invalid User ID format'),
+        check('activate').notEmpty().withMessage("User Id can't be empty")
+            .isIn([true, false]).withMessage('Value can either be true or false!')
+    ],
+    handleActivation
+);
+
+userRouter.post(
+    '/remove-from-blacklist',
+    [
+        check('userId').notEmpty().withMessage("User Id can't be empty")
+            .isMongoId().withMessage('Invalid User ID format')
+    ],
+    removeFromBlackList
+);
+
+userRouter.post(
+    '/blacklistUser',
+    [
+        check('userId').notEmpty().withMessage("User Id can't be empty")
+            .isMongoId().withMessage('Invalid User ID format')
+    ],
+    blacklistUser
 );
 
 userRouter.get('/logout', logoutUser);

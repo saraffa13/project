@@ -45,15 +45,15 @@ const Medicine = () => {
 	};
 
 	return (
-		<section className="p-8">
+		<section className="p-8 dark:bg-gray-900">
 			<div className="flex gap-4 mb-6">
-				<div className="w-1/2">
+				<div className="w-1/2 ">
 					<input
 						type="text"
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 						placeholder="Search medicines..."
-						className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className=" dark:bg-gray-600 dark:text-white p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
 					/>
 				</div>
 
@@ -61,7 +61,7 @@ const Medicine = () => {
 					<select
 						value={selectedCategory}
 						onChange={(e) => setSelectedCategory(e.target.value)}
-						className="p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className="dark:bg-gray-600 dark:text-white p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						{categories.map((category: any) => (
 							<option key={category} value={category}>
@@ -73,7 +73,7 @@ const Medicine = () => {
 			</div>
 
 			<div className="flex justify-between">
-				{role === 'admin' && <div className="flex justify-end mb-6">
+				{role !== 'user' && <div className="flex justify-end mb-6">
 					<Link to="/admin/addMedicine"
 						onClick={clearFilters}
 						className="bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-600"

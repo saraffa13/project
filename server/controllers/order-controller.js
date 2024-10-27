@@ -10,7 +10,7 @@ const getOrders = async (req, res) => {
         return res.status(401).json({ message: 'You must be logged in to view your cart' });
     }
 
-    if(user.role === 'admin'){
+    if(user.role === 'admin' || user.role === 'superAdmin'){
         try {
             let orderData = await orderModel
                 .find()

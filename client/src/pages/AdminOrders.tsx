@@ -9,7 +9,6 @@ import {
   FaEnvelope,
   FaPhone,
 } from "react-icons/fa";
-import NotFound from "./NotFound";
 
 const AdminOrders = () => {
   const { orders } = useSelector((state: any) => state.cart)

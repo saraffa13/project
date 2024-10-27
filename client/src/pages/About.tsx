@@ -5,7 +5,7 @@ const About = () => {
     const {language} = useSelector((state:any)=>state.auth);
     
     return (
-        <>
+        <section className="dark:bg-gray-900">
             {language ==='english' ? (<div className='p-4'>
             <section className={`max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg dark:bg-gray-800`}>
 
@@ -61,7 +61,7 @@ const About = () => {
                 </p>
             </section>
         </div>) }
-        </>
+        </section>
     );
 };
 

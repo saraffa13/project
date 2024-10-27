@@ -40,10 +40,10 @@ export const SignUp = () => {
     const formSubmitHandler = async (values: FormValues, { setSubmitting, resetForm }: FormikHelpers<FormValues>) => {
         try {
             await signUp(values);
-            notify('Signup Successful!')
+            notify('Signup Successful! Please check your email to confirm your account!')
             navigate('/login')
-        } catch (error) {
-            notify('Something went wrong')
+        } catch (error:any) {
+            notify(error.response.data.message)
             console.log('Something went wrong');
         } finally {
             setSubmitting(false);

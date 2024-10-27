@@ -18,6 +18,17 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    confirmationToken: {
+        type: String,
+    },
+    isActive: {
+        type: Boolean,
+        default: false,
+    },
+    blacklisted:{
+        type:Boolean,
+        default:false,
+    },
     phoneNumber: {
         type: Number,
         required: true
@@ -25,7 +36,7 @@ const userSchema = mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ['admin', 'user'],
+        enum: ['superAdmin','admin', 'user'],
         default: 'user'
     },
     cart: {

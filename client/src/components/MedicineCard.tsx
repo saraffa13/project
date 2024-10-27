@@ -25,7 +25,6 @@ const MedicineCard = ({ medicine, type, quantity, price, priceOff }: any) => {
   }, [cartItems, medicine._id]);
 
   const addMedicineToCart = async (medicineId: string, name: string, price:number) => {
-    console.log(medicineId, name, price);
     try {
       await axios.post(
         `${baseURL}/cart/add-to-cart`,
@@ -39,8 +38,6 @@ const MedicineCard = ({ medicine, type, quantity, price, priceOff }: any) => {
   };
 
   const updateQty = async (medicineId: string, type: string, price: number) => {
-    console.log(price);
-
     try {
       const response = await axios.post(
         `${baseURL}/cart/update-quantity`,
@@ -102,7 +99,7 @@ const MedicineCard = ({ medicine, type, quantity, price, priceOff }: any) => {
               {medicine.composition || "No detailed description available"}
             </p>
 
-            {loggedIn && role === 'admin' && (
+            {loggedIn && role !== 'user' && (
               <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 Inventory: <span className="font-semibold">{medicine.inventory_quantity}</span>
               </p>
@@ -127,7 +124,7 @@ const MedicineCard = ({ medicine, type, quantity, price, priceOff }: any) => {
               </div>
             </div>
 
-            {loggedIn && role !== 'admin' && medicine.inventory_quantity > 0 && quantity === 0 && (
+            {loggedIn && role === 'user' && medicine.inventory_quantity > 0 && quantity === 0 && (
               <button
                 onClick={(e) => {
                   e.preventDefault();

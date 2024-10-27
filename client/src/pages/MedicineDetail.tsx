@@ -121,7 +121,7 @@ const MedicineDetail = () => {
             <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100">
               {medicine.name}
             </h2>
-            {role === "admin" && (
+            {role !== "user" && (
               <button
                 onClick={handleEditClick}
                 className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition duration-300"

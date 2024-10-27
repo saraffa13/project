@@ -10,7 +10,7 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 
 export const Login = () => {
 
-	const [loggedIn, setLoggedIn] = useLocalStorage<boolean>('loggedIn',false);
+    const [loggedIn, setLoggedIn] = useLocalStorage<boolean>('loggedIn', false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ export const Login = () => {
                 password: values.password,
             });
             console.log(response.data);
-			setLoggedIn(true);
+            setLoggedIn(true);
             return response.data; 
         } catch (error) {
             console.error("Error during login:", error);
@@ -39,14 +39,15 @@ export const Login = () => {
         console.log(values);
         try {
             await apiLogin(values);
-			dispatch(login({
-				email:values.email,
-				password:values.password
-			}))
-			navigate('/')
+            dispatch(login({
+                email: values.email,
+                password: values.password
+            }));
+            navigate('/');
             notify('Login Successful!');
-        } catch (error) {
-            notify('Incorrect login credentials. Please try again.');
+        } catch (error: any) {
+            console.log(error);
+            notify(error?.response?.data?.message);
         } finally {
             setSubmitting(false);
             resetForm();
@@ -126,6 +127,15 @@ export const Login = () => {
                                 </button>
                                 <Link to="/signup" className="w-full flex justify-center mt-4 py-2 px-4 border border-indigo-600 rounded-md shadow-sm text-sm font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:text-indigo-400 dark:border-indigo-400 dark:hover:bg-indigo-600 dark:hover:text-white">
                                     Signup
+                                </Link>
+                            </div>
+
+                            <div className="text-center mt-4">
+                                <Link
+                                    to="/forgot-password"
+                                    className="text-sm text-indigo-600 hover:underline dark:text-indigo-400"
+                                >
+                                    Forgot Password?
                                 </Link>
                             </div>
                         </Form>

@@ -4,6 +4,7 @@ const { addTranslation, getTranslation } = require('../controllers/traslation-co
 const router = express.Router();
 
 router.post('/add', addTranslation);
+
 router.get('/', getTranslation);
 
 module.exports = router;

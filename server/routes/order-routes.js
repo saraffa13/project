@@ -8,5 +8,4 @@ router.get('/', auth, getOrders);
 
 router.post('/post-order', auth, postOrders);
 
-
 module.exports = router;

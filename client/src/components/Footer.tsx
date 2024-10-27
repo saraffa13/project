@@ -6,7 +6,7 @@ const Footer = () => {
 
     const { loggedIn, languageKeyWords, language } = useSelector((state: any) => state.auth)
     return (
-        <div className='border-t'>
+        <div className='border-t z-50 relative'>
 
 
             <footer className="bg-white dark:bg-gray-900">

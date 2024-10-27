@@ -1,22 +1,63 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import AdminOrders from "./AdminOrders";
+import UsersList from "./AdminUsers";
+import MedicineSalesCharts from "./MedicinesSalesChart";
 
 const Admin = () => {
+    const [activeSection, setActiveSection] = useState("orders");
+
+    const renderContent = () => {
+        switch (activeSection) {
+            case "orders":
+                return <div className="p-4"><AdminOrders /></div>;
+            case "users":
+                return <div className="p-4"><UsersList /></div>;
+            case "sales":
+                return <div className="p-4"><MedicineSalesCharts /></div>;
+            default:
+                return <div className="p-4">Select a section</div>;
+        }
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-            <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Admin Dashboard</h1>
-            
-            <div className="flex flex-col space-y-6">
-                <Link to="/admin/orders" className="w-64 p-4 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700">
+        <div className="flex min-h-screen bg-gray-100 text-black dark:bg-gray-900 dark:text-white">
+            <div className="fixed top-24 left-0 w-1/5 h-full bg-gray-200 text-black dark:bg-gray-800 dark:text-white flex flex-col space-y-4 p-6">
+                <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
+                
+                <button
+                    onClick={() => setActiveSection("orders")}
+                    className={`p-3 text-left rounded-lg ${
+                        activeSection === "orders"
+                            ? "bg-gray-500 dark:bg-gray-700"
+                            : "bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700"
+                    }`}
+                >
                     Orders
-                </Link>
-
-                <Link to="/admin/users" className="w-64 p-4 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:bg-green-600 dark:hover:bg-green-700">
+                </button>
+                <button
+                    onClick={() => setActiveSection("users")}
+                    className={`p-3 text-left rounded-lg ${
+                        activeSection === "users"
+                            ? "bg-gray-500 dark:bg-gray-700"
+                            : "bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700"
+                    }`}
+                >
                     Users
-                </Link>
+                </button>
+                <button
+                    onClick={() => setActiveSection("sales")}
+                    className={`p-3 text-left rounded-lg ${
+                        activeSection === "sales"
+                            ? "bg-gray-500 dark:bg-gray-700"
+                            : "bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700"
+                    }`}
+                >
+                    Sales
+                </button>
+            </div>
 
-                <Link to="/admin/sales" className="w-64 p-4 bg-red-500 text-white rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:bg-green-600 dark:hover:bg-green-700">
-                    Data
-                </Link>
+            <div className="flex-1 ml-[20%] p-6 overflow-auto">
+                {renderContent()}
             </div>
         </div>
     );
