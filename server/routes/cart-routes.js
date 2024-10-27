@@ -13,7 +13,8 @@ router.post('/add-to-cart', [
         .notEmpty().withMessage("Medicine Id is required!")
         .isMongoId().withMessage("Provide a valid Mongo Id"),
     check('name')
-        .notEmpty().withMessage("Medicine name is required!"),
+        .notEmpty().withMessage("Medicine name is required!")
+        .matches(/^[A-Za-z\s]+$/).withMessage("Name should contain only alphabetic characters and spaces!"),
     check('price')
         .notEmpty().withMessage("Medicine price is required!")
         .isFloat({ min: 0.01 }).withMessage("Medicine price must be greater than 0!")

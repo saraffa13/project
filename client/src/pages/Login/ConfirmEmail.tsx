@@ -6,6 +6,7 @@ import { notify, notifyError } from "../../utils/helper";
 let baseURL = import.meta.env.VITE_BASE_URL;
 
 const ConfirmEmail = () => {
+
     const { token } = useParams();
     const navigate = useNavigate();
     const [error, setError] = useState(false);
@@ -17,12 +18,11 @@ const ConfirmEmail = () => {
                 notify(response.data.message || "Email confirmed successfully!");
                 setError(false);
                 setTimeout(() => navigate("/login"), 3000);
-            } catch (err:any) {
+            } catch (err: any) {
                 notifyError(err.response?.data.message || "Confirmation failed. The token may be invalid or expired.");
                 setError(true);
             }
         };
-
         confirmEmail();
     }, [token, navigate]);
 

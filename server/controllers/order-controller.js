@@ -3,19 +3,19 @@ const medicineModel = require("../models/medicine-model");
 const orderModel = require("../models/orders-model");
 const userModel = require("../models/user-model");
 
-const getOrders = async (req, res) => {
+module.exports.getOrders = async (req, res) => {
     const user = req.user;
 
     if (!user) {
         return res.status(401).json({ message: 'You must be logged in to view your cart' });
     }
 
-    if(user.role === 'admin' || user.role === 'superAdmin'){
+    if (user.role === 'admin' || user.role === 'superAdmin') {
         try {
             let orderData = await orderModel
                 .find()
                 .populate('orders')
-    
+
             res.status(200).json({
                 message: "Order data successfully retrieved",
                 data: orderData
@@ -26,16 +26,17 @@ const getOrders = async (req, res) => {
                 message: "Something went wrong!"
             });
         }
-    }else{
+    } else {
         try {
             let orderData = await orderModel
                 .find({ _id: { $in: user.orders } })
                 .populate('orders')
-    
+
             res.status(200).json({
                 message: "Order data successfully retrieved",
                 data: orderData
             });
+
         } catch (error) {
             console.error(error);
             res.status(500).json({
@@ -43,12 +44,10 @@ const getOrders = async (req, res) => {
             });
         }
     }
-
-    
 };
 
 
-const postOrders = async (req, res) => {
+module.exports.postOrders = async (req, res) => {
 
     const user = req.user;
     const { name, email, phone, address, paymentMethod, deliveryDate } = req.body;
@@ -67,16 +66,16 @@ const postOrders = async (req, res) => {
             })
         }
 
-       cartData.cartItems.map(async (item)=>{
-        let medicine = await medicineModel.findById(item.item._id);
-        medicine.inventory_quantity -=  item.quantity;
-        medicine.quantity_sold += item.quantity;
-        medicine.sales = [...medicine.sales,{date:Date.now(),quantity:item.quantity}];
-        await medicine.save();
-       })
+        cartData.cartItems.map(async (item) => {
+            let medicine = await medicineModel.findById(item.item._id);
+            medicine.inventory_quantity -= item.quantity;
+            medicine.quantity_sold += item.quantity;
+            medicine.sales = [...medicine.sales, { date: Date.now(), quantity: item.quantity }];
+            await medicine.save();
+        })
 
         const newOrder = new orderModel({
-            user:user._id,
+            user: user._id,
             name,
             email,
             phone,
@@ -85,7 +84,7 @@ const postOrders = async (req, res) => {
             orders: user.cart,
             deliveryDate,
             status: "pending",
-            totalPrice:user.cart.totalPrice
+            totalPrice: user.cart.totalPrice
         })
 
         const order = await newOrder.save();
@@ -115,10 +114,3 @@ const postOrders = async (req, res) => {
     }
 }
 
-
-
-
-module.exports = {
-    getOrders,
-    postOrders,
-}

@@ -10,7 +10,7 @@ const Medicine = () => {
 	const { medicines } = useSelector((state: any) => state.medicine);
 	const { cartItems } = useSelector((state: any) => state.cart);
 	const { role } = useSelector((state: any) => state.auth);
-	
+
 	const params = useParams();
 	const navigate = useNavigate();
 	const [searchTerm, setSearchTerm] = useState('');
@@ -20,8 +20,8 @@ const Medicine = () => {
 	useEffect(() => {
 		dispatch(fetchMedicines());
 	}, [dispatch]);
-	
-	
+
+
 	useEffect(() => {
 		if ('type' in params) {
 			setSelectedCategory(params.type);
@@ -97,6 +97,7 @@ const Medicine = () => {
 					filteredMedicines.map((medicine: any) => (
 						<MedicineCard
 							key={medicine._id}
+							inventory_quantity={medicine.inventory_quantity}
 							medicine={medicine}
 							type="notCart"
 							price={medicine.price}

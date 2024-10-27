@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const cartModel = require("../models/cart-model");
 
-const getCartItems = async (req, res) => {
+module.exports.getCartItems = async (req, res) => {
 
     const user = req.user;
     const cartId = user.cart;
@@ -28,17 +28,16 @@ const getCartItems = async (req, res) => {
 
 }
 
-const addToCart = async (req, res) => {
+module.exports.addToCart = async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-
     const user = req.user;
-    const { medicineId, name, price } = req.body;
 
+    const { medicineId, name, price } = req.body;
 
     if (!user) {
         return res.status(401).json({ message: 'You must be logged in to view your cart' })
@@ -62,11 +61,9 @@ const addToCart = async (req, res) => {
             message: "Something went wrong!"
         })
     }
-
-
 }
 
-const updateQuantity = async (req, res) => {
+module.exports.updateQuantity = async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -120,7 +117,7 @@ const updateQuantity = async (req, res) => {
         })
     }
 }
-const deleteItemFromCart = async (req, res) => {
+module.exports.deleteItemFromCart = async (req, res) => {
 
     const user = req.user;
     const { medicineId, price, quantity } = req.body;
@@ -138,6 +135,7 @@ const deleteItemFromCart = async (req, res) => {
         const newCartItems = cartData.cartItems.filter((cartItem) => cartItem.item != medicineId)
 
         cartData.cartItems = [...newCartItems]
+
         cartData.totalPrice = cartData.totalPrice - (price * quantity);
 
         await cartData.save();
@@ -154,10 +152,3 @@ const deleteItemFromCart = async (req, res) => {
     }
 }
 
-
-module.exports = {
-    getCartItems,
-    addToCart,
-    updateQuantity,
-    deleteItemFromCart
-}

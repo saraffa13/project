@@ -25,8 +25,7 @@ module.exports.createMedicine = async (req, res) => {
             imageUrl = fileResponse.secure_url;
         }
         const newMedicine = new medicineModel({ ...medicine, image_url: imageUrl, 'exp_date': new Date(medicine.exp_date).getTime() })
-        await newMedicine.save()
-
+        await newMedicine.save();
 
         res.status(202).json({
             message: "Medicines created successfully",
@@ -78,6 +77,24 @@ module.exports.getMedicine = async (req, res) => {
     try {
 
         const medicine = await medicineModel.find();
+
+        res.status(202).json({
+            message: "Here is the medicine",
+            data: medicine
+        })
+
+    } catch (error) {
+        res.status(404).json({
+            message: "Couldn't create medicine. Something went wrong!"
+        })
+    }
+}
+
+module.exports.getSpecialOffersMedicines = async (req, res) => {
+
+    try {
+
+        const medicine = (await medicineModel.find().sort({priceOff:-1})).splice(0,4);
 
         res.status(202).json({
             message: "Here is the medicine",

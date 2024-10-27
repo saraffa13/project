@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { markNotificationAsRead } from '../store/slicers/authSlicer';
+// import { markNotificationAsRead } from '../store/slicers/authSlicer';
 import axios from 'axios';
 import { notifyError } from '../utils/helper';
+import { markNotificationAsRead } from '../store/slicers/authSlicer';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -9,17 +10,17 @@ const NotificationPage = () => {
   const { notification } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch();
 
-  const handleMarkAsRead = async(notificationId: any) => {
+  const handleMarkAsRead = async (notificationId: any) => {
     try {
-        const response = await axios.post(
-          `${baseURL}/user/notification/markAsRead`,
-          { notificationId },
-          { withCredentials: true }
-        );
-        dispatch(markNotificationAsRead(notificationId));
-      } catch (error) {
-        notifyError("Something went wrong!");
-      }
+      const response = await axios.post(
+        `${baseURL}/user/notification/markAsRead`,
+        { notificationId },
+        { withCredentials: true }
+      );
+      dispatch(markNotificationAsRead(notificationId));
+    } catch (error) {
+      notifyError("Something went wrong!");
+    }
   };
 
   return (
@@ -30,38 +31,38 @@ const NotificationPage = () => {
       <div className="bg-white rounded-lg shadow-md p-4">
         {notification?.length > 0 ? (
           <ul className="divide-y divide-gray-200">
-            {notification.map((notify: any) => (
+            {notification?.map((notify: any) => (
               <li
-                key={notify._id}
+                key={notify?._id}
                 className={`flex justify-between items-start p-4 rounded-md hover:bg-blue-50 transition-all duration-200 ${
                   notify.read ? 'bg-gray-100' : 'bg-blue-100'
                 }`}
               >
                 <div>
                   <p className="text-lg font-medium text-gray-800">
-                    {notify.message}
+                    {notify?.notification?.message}
                   </p>
                   <p className="text-sm text-gray-500 mt-1">
-                    <span className="font-semibold">Role:</span> {notify.role}
+                    <span className="font-semibold">Role:</span> {notify?.notification?.role}
                   </p>
                   <p className="text-sm text-gray-400">
                     <span className="font-semibold">Created At:</span>{' '}
-                    {new Date(notify.createdAt).toLocaleString()}
+                    {new Date(notify?.notification?.createdAt).toLocaleString()}
                   </p>
                 </div>
                 <div className="flex items-center space-x-4">
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
-                      notify.read
+                      notify?.read
                         ? 'bg-green-200 text-green-800'
                         : 'bg-red-200 text-red-800'
                     }`}
                   >
-                    {notify.read ? 'Read' : 'Unread'}
+                    {notify?.read ? 'Read' : 'Unread'}
                   </span>
-                  {!notify.read && (
+                  {!notify?.read && (
                     <button
-                      onClick={() => handleMarkAsRead(notify._id)}
+                      onClick={() => handleMarkAsRead(notify?._id)}
                       className="text-blue-600 font-semibold hover:text-blue-800"
                     >
                       Mark as Read
@@ -72,7 +73,7 @@ const NotificationPage = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-center text-gray-500">No notification available.</p>
+          <p className="text-center text-gray-500">No notifications available.</p>
         )}
       </div>
     </div>

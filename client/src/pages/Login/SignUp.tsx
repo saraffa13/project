@@ -43,7 +43,7 @@ export const SignUp = () => {
             notify('Signup Successful! Please check your email to confirm your account!')
             navigate('/login')
         } catch (error:any) {
-            notify(error.response.data.message)
+            notify("Something went wrong")
             console.log('Something went wrong');
         } finally {
             setSubmitting(false);
@@ -71,6 +71,10 @@ export const SignUp = () => {
         if (!values.password) {
             errors.password = "Required";
         }
+        //  else if (values.password.length < 6) {
+        //     errors.password = "Password must contain at least 6 characters";
+        // }
+        
 
         if (!values.role) {
             errors.role = "Required";

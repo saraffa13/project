@@ -5,10 +5,20 @@ const { check } = require('express-validator');
 
 const userRouter = express.Router();
 
-userRouter.post('/register', [
-    check('name').notEmpty().withMessage("Name is Required!"),
+userRouter.get('/logout', logoutUser);
+userRouter.get('/confirm-email/:token', confirmEmail);
+userRouter.get('/get-user', auth, getUser);
+userRouter.get('/get-all-users', auth, getAllUsers);
+userRouter.get('/notification', auth, getNotification);
 
-    check('email').isEmail().withMessage("Please enter a valid email!"),
+
+userRouter.post('/register', [
+    check('name')
+        .notEmpty().withMessage("Name is required!")
+        .matches(/^[A-Za-z\s]+$/).withMessage("Name should contain only alphabetic characters and spaces!"),
+
+    check('email')
+        .isEmail().withMessage("Please enter a valid email!"),
 
     check('password')
         .notEmpty().withMessage("Password is required!")
@@ -26,19 +36,14 @@ userRouter.post('/register', [
     check('gender')
         .notEmpty().withMessage("Gender is required!")
         .isIn(['male', 'female']).withMessage("Gender must be one of: male, female"),
-
 ], registerUser);
 
-userRouter.get('/confirm-email/:token', confirmEmail);
-
-userRouter.get('/get-user', auth, getUser);
-
-userRouter.get('/get-all-users', auth, getAllUsers);
 
 userRouter.post('/forgot-password/', [
     check('email')
         .isEmail().withMessage('Please enter a valid email!')
 ], forgotPassword);
+
 
 userRouter.post('/change-password/', [
     check('newPassword')
@@ -46,15 +51,13 @@ userRouter.post('/change-password/', [
         .isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
     check('confirmationToken')
         .notEmpty().withMessage("Token is required!")
+        .isLength({ min: 40, max: 40 }).withMessage("Token must be 40 characters long")
+        .matches(/^[a-f0-9]+$/i).withMessage("Token must be a hexadecimal string generated from crypto.randomBytes"),
 ], changePassword);
 
-userRouter.get('/notification', [
-    auth
-], getNotification);
 
-userRouter.post('/notification/markAsRead', [
-    auth
-], markNotificationAsRead);
+userRouter.post('/notification/markAsRead', auth, markNotificationAsRead);
+
 
 userRouter.post(
     '/login',
@@ -62,16 +65,17 @@ userRouter.post(
         isActive,
         check('email')
             .isEmail().withMessage('Please enter a valid email!'),
-
         check('password')
             .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
     ],
     loginUser
 );
 
+
 userRouter.post(
     '/handleActivation',
     [
+        adminAuth,
         check('userId').notEmpty().withMessage("User Id can't be empty")
             .isMongoId().withMessage('Invalid User ID format'),
         check('activate').notEmpty().withMessage("User Id can't be empty")
@@ -79,6 +83,7 @@ userRouter.post(
     ],
     handleActivation
 );
+
 
 userRouter.post(
     '/remove-from-blacklist',
@@ -89,6 +94,7 @@ userRouter.post(
     removeFromBlackList
 );
 
+
 userRouter.post(
     '/blacklistUser',
     [
@@ -98,7 +104,6 @@ userRouter.post(
     blacklistUser
 );
 
-userRouter.get('/logout', logoutUser);
 
 userRouter.post('/delete', [
     adminAuth,

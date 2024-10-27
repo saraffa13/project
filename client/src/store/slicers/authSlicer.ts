@@ -65,6 +65,7 @@ export const getKeyWords = createAsyncThunk<boolean>(
         return response.data.data[0].translations;
     }
 );
+
 export const getNotification = createAsyncThunk<any>(
     "auth/getNotification",
     async () => {
@@ -160,11 +161,13 @@ export const authSlice = createSlice({
             } else {
                 localStorage.setItem("loggedIn", "true");
                 (state.email = action.payload.email),
-                    (state.role = action.payload.role);
+                (state.role = action.payload.role);
+                console.log(action.payload);
+                state.notification = action.payload.notifications
                 state.loggedIn = true;
             }
         });
-        builder.addCase(checkUserName.rejected, (state: UserState, action) => {
+        builder.addCase(checkUserName.rejected, (state: UserState) => {
             state.loggedIn = false;
             localStorage.setItem("loggedIn", "false");
             localStorage.setItem("role", "");
@@ -174,13 +177,8 @@ export const authSlice = createSlice({
         });
 
         builder.addCase(getUsers.fulfilled, (state: UserState, action) => {
+            console.log(action.payload);
             state.users = action.payload;
-        });
-        builder.addCase(getNotification.fulfilled, (state: UserState, action) => {
-            state.notification = action.payload;
-        });
-        builder.addCase(getNotification.rejected, (state: UserState) => {
-            state.notification = [];
         });
     },
 });

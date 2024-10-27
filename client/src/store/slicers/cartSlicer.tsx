@@ -4,9 +4,9 @@ import axios from 'axios';
 let baseURL = import.meta.env.VITE_BASE_URL;
 
 interface cartState {
-    cartItems: [],
+    cartItems: any,
     totalPrice: number,
-    orders: []
+    orders: any
 }
 
 const initialCart: cartState = {
@@ -39,6 +39,7 @@ export const cartSlice = createSlice({
     initialState: initialCart,
 
     reducers: {
+        
         addToCart: (state: any, action: any) => {
             state.totalPrice += Number(action.payload.price)
             state.cartItems = [...state.cartItems, { item: action.payload.medicine, name: action.payload.medicine.name, quantity: 1 }]

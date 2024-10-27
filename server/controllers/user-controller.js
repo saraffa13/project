@@ -93,27 +93,38 @@ module.exports.confirmEmail = async (req, res) => {
         if (!user) {
             return res.status(400).send({ message: "Invalid or expired confirmation token." });
         }
-        
+
         const notification = new notificationModel({
-            message: user.role === 'admin'? `A new ${user.role} user ${user.name} Signed Up. Click <a href="http://localhost:5173/admin">here</a> to cofirm his account.`:`A new user ${user.name} Signed Up`,
-            role:user.role,
-            createdAt:Date.now(),
-            read:false
+            message: user.role === 'admin' ? `A new ${user.role} user ${user.name} Signed Up. Click <a href="http://localhost:5173/admin">here</a> to cofirm his account.` : `A new user ${user.name} Signed Up`,
+            role: user.role,
+            createdAt: Date.now(),
+            read: false
         })
 
-        
-        user.confirmationToken = undefined;
+
         if (user.role === 'user') {
             user.isActive = true;
             await user.save();
-            await notification.save();
+            const finalNotification = await notification.save();
+            const adminUser = await userModel.find({ role: 'admin' });
+            const superAdminUser = await userModel.findOne({ role: 'superAdmin' });
+            adminUser.forEach(async (user) => {
+                if (!user.notifications) user.notifications = []
+                user.notifications.push({ notification: finalNotification._id, read: false });
+                await user.save();
+            })
+            if (!superAdminUser.notifications) superAdminUser.notifications = []
+            superAdminUser.notifications.push({ notification: finalNotification._id, read: false });
+            await superAdminUser.save();
             await sendGeneralMail(notification.message, 'ssaraffa786@gmail.com', "User Account Creation")
+            user.confirmationToken = undefined;
             res.status(200).send({ message: "Account confirmed successfully. You can now log in." });
-        }else {
+        } else {
             user.confirmationToken = undefined;
             await user.save();
             await notification.save();
             await sendGeneralMail(notification.message, 'ssaraffa786@gmail.com', "User Account Creation")
+            user.confirmationToken = undefined;
             res.status(200).send({ message: "Account confirmed successfully. Wait for the Admin Approval" });
         }
 
@@ -200,6 +211,10 @@ module.exports.handleActivation = async (req, res) => {
         const user = await userModel.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found!" })
+        }else if(user.role === req.user.role){
+            return res.status(403).json({
+                message: "Operation Not Allowed!",
+            })
         } else {
             if (activate) {
                 user.isActive = true;
@@ -221,10 +236,7 @@ module.exports.handleActivation = async (req, res) => {
             message: 'Something went wrong!',
             error: error.message
         });
-
     }
-
-
 }
 
 module.exports.forgotPassword = async (req, res) => {
@@ -237,7 +249,7 @@ module.exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
-        const user = await userModel.findOne({email});
+        const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: "User not found!" })
         } else {
@@ -274,16 +286,12 @@ module.exports.changePassword = async (req, res) => {
     const { newPassword, confirmationToken } = req.body;
 
     try {
-        const user = await userModel.findOne({confirmationToken});
-        if (!user ) {
-            console.log('shiva');
+        const user = await userModel.findOne({ confirmationToken });
+        if (!user) {
             return res.status(404).json({ message: "User not found!" })
-        } else if(user.confirmationToken !== confirmationToken) {
-            console.log('shivam');
+        } else if (user.confirmationToken !== confirmationToken) {
             return res.status(404).json({ message: "Invalid Token!" })
-            
-        }else{
-            console.log('shivamm');
+        } else {
             user.confirmationToken = undefined;
             const hashedPassword = await bcrypt.hash(newPassword, 5);
             user.password = hashedPassword;
@@ -304,8 +312,6 @@ module.exports.changePassword = async (req, res) => {
         });
 
     }
-
-
 }
 
 module.exports.removeFromBlackList = async (req, res) => {
@@ -383,9 +389,14 @@ module.exports.getUser = async (req, res) => {
             return res.status(404).json({ message: "User not found!" })
         }
 
+        const newUser = await userModel.findById(user._id).populate({
+            path: 'notifications.notification',
+            model: 'Notification'
+        })
+
         return res.status(200).json({
             message: "User!",
-            data: user
+            data: newUser
         })
 
     }
@@ -416,13 +427,17 @@ module.exports.getAllUsers = async (req, res) => {
                 data: []
             })
         } else if (role === 'admin') {
-            const user = await userModel.find({ role: 'user' });
+            const user = await userModel.find({ role: 'user' })
             return res.status(200).json({
                 message: "Here are the list of Users!",
                 data: user
             })
         } else if (role === 'superAdmin') {
-            const user = await userModel.find({ role: { $in: ['admin', 'user'] } });
+
+            const user = await userModel.find({ role: { $in: ['admin', 'user'] } }).populate({
+                path: 'notifications.notification',
+                model: 'Notification'
+            });
 
             return res.status(200).json({
                 message: "Here are the list of Users!",
@@ -489,8 +504,7 @@ module.exports.getNotification = async (req, res) => {
 module.exports.markNotificationAsRead = async (req, res) => {
 
     const user = req.user;
-    const role = user.role;
-    const {notificationId} = req.body
+    const { notificationId } = req.body
 
     try {
 
@@ -498,21 +512,23 @@ module.exports.markNotificationAsRead = async (req, res) => {
             return res.status(404).json({ message: "Unauthorised Access!" })
         }
 
-        if (role === 'superAdmin') {
-            const notification = await notificationModel.findById(notificationId);
-            notification.read=true;
-            await notification.save();
+        const newUser = await userModel.findById(user._id);
+        newUser.notifications = newUser.notifications.map((notify)=>{
+            console.log(notify._id);
+            if(notify._id.toString() === notificationId.toString()){
+                return {
+                    ...notify,
+                    read:true,
+                }
+            }else{
+                return notify
+            }
+        })
+        await newUser.save();
 
-            return res.status(200).json({
-                message: "Operation Successful!",
-                data: notification
-            })
-            
-        }else{
-            return res.status(401).json({
-                message: "Operation Not Allowed!",
-            })
-        }
+        return res.status(200).json({
+            message: "Operation Successful!",
+        })
 
 
     }

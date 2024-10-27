@@ -25,9 +25,9 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    blacklisted:{
-        type:Boolean,
-        default:false,
+    blacklisted: {
+        type: Boolean,
+        default: false,
     },
     phoneNumber: {
         type: Number,
@@ -36,18 +36,28 @@ const userSchema = mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ['superAdmin','admin', 'user'],
+        enum: ['superAdmin', 'admin', 'user'],
         default: 'user'
     },
     cart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Cart'
     },
+    notifications: [{
+        notification: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Notification'
+        },
+        read: {
+            type:Boolean
+        }
+    }],
     orders: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Order'
-    }]
-    
+    }],
+
+
 }, { versionKey: false, timeStamps: true })
 
 const userModel = mongoose.model('User', userSchema)

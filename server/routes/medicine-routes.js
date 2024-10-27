@@ -1,19 +1,23 @@
 const express = require('express');
-const { createMedicine, getMedicine, editMedicine } = require('../controllers/medicine-controller');
+const { createMedicine, getMedicine, editMedicine, getSpecialOffersMedicines } = require('../controllers/medicine-controller');
 const { adminAuth } = require('../middlewares/auth');
 
 const multer = require('multer');
 const { check } = require('express-validator');
 
+const router = express.Router();
 const upload = multer({ dest: "uploads/" })
 
-const router = express.Router();
+
+router.get('/', getMedicine);
+router.get('/special-offers', getSpecialOffersMedicines );
+
 
 router.post(
     '/create-medicine',
     [
         adminAuth,
-        upload.single("image_url"),
+        upload.single("image_url"), // req.file me information daalega
         check('image_url')
             .custom((value, { req }) => {
                 if (!req.file) {
@@ -37,6 +41,5 @@ router.post(
 );
 
 router.post('/edit-medicine', adminAuth, editMedicine);
-router.get('/', getMedicine);
 
 module.exports = router;
