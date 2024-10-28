@@ -25,20 +25,29 @@ const Home = () => {
 	const { medicines } = useSelector((state: any) => state.medicine)
 	const categories = [...new Set(medicines.map((medicine: any) => medicine.category))].slice(0, 4);
 	const [specialOffers, setSpecialOffers] = useState<any[]>([]);
+	const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
 
 	useEffect(() => {
-		const fetchMedicines = async () => {
+		const fetchMedicines = async (type: string) => {
 			try {
-				const response = await axios.get(`${baseURL}/medicine/special-offers`);
+				const response = await axios.get(`${baseURL}/medicine/${type}`);
 				const offerMedicines = response.data.data;
-				console.log(offerMedicines);
-				setSpecialOffers(offerMedicines);
+
+				if (type === 'special-offers') {
+					setSpecialOffers(offerMedicines);
+
+				} else {
+					console.log(offerMedicines);
+					setFeaturedProducts(offerMedicines)
+				}
 			} catch (error) {
 				console.error("Couldn't fetch the medicines", error);
 				throw error;
 			}
 		};
-		fetchMedicines();
+		fetchMedicines('special-offers');
+		fetchMedicines('featured-medicines');
+
 	}, []);
 
 	useEffect(() => {
@@ -88,15 +97,40 @@ const Home = () => {
 				<div className="max-w-7xl mx-auto px-4 md:px-0">
 					<h2 className="text-3xl font-bold text-center mb-12">Featured Products</h2>
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-						{medicines.slice(0, 3).map((product: any) => (
-							<Link key={product.name} to={product.link} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
-								<img src={product.image_url} alt={product.name} className="w-full h-48 object-cover mb-6 rounded-t-lg" />
-								<div className="text-center">
-									<h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
-									<p className="mt-2 text-lg font-semibold text-blue-600">${product.price.toFixed(2)}</p>
-								</div>
-							</Link>
-						))}
+						{featuredProducts.slice(0, 3).map((product: any) => {
+							const {price, priceOff, quantity, _id, quantity_sold} = product;
+
+							const displayedPrice = price || 0;
+							const discountedPrice = priceOff > 0 ? (displayedPrice - (displayedPrice * priceOff / 100)).toFixed(2) : displayedPrice.toFixed(2);
+
+							const totalDisplayedPrice = quantity > 0 ? (displayedPrice * quantity).toFixed(2) : displayedPrice.toFixed(2);
+							const totalDiscountedPrice = quantity > 0 ? (discountedPrice * quantity).toFixed(2) : discountedPrice;
+
+							return <Link
+							key={product.name}
+							to={`/medicines/details/${_id}`}
+							className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out"
+						  >
+							<img
+							  src={product.image_url}
+							  alt={product.name}
+							  className="w-full h-56 object-cover mb-6 rounded-lg transition-transform duration-300 ease-in-out hover:scale-110"
+							/>
+							<div className="text-center">
+							  <h3 className="text-2xl font-bold text-gray-800">{product.name}</h3>
+							  <p className="mt-2 text-lg font-medium text-gray-500">Sold: {quantity_sold}</p>
+							  <div className="flex justify-center items-center gap-2 mt-2">
+								<p className={`text-lg font-medium text-gray-600 ${totalDiscountedPrice > 0 ? 'line-through text-red-500' : ''}`}>
+								  ${totalDisplayedPrice}
+								</p>
+								{totalDiscountedPrice > 0 && (
+								  <p className="text-lg font-bold text-green-600">${totalDiscountedPrice}</p>
+								)}
+							  </div>
+							</div>
+						  </Link>
+						  
+						})}
 					</div>
 				</div>
 			</section>
@@ -104,9 +138,10 @@ const Home = () => {
 			<section className="py-16 bg-blue-600 text-white">
 				<div className="max-w-7xl mx-auto px-4 md:px-0">
 					<h2 className="text-3xl font-bold text-center mb-8">Special Offers</h2>
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-						{specialOffers.map((offer: any) => (
-							<MedicineCard
+					<div className="flex flex-wrap ">
+						{specialOffers.map((offer: any) => {
+							return <MedicineCard
+								specialOffers={true}
 								key={offer._id}
 								medicine={offer}
 								type="specialOffer"
@@ -115,7 +150,7 @@ const Home = () => {
 								price={offer.price}
 								priceOff={offer.priceOff || 0}
 							/>
-						))}
+						})}
 					</div>
 				</div>
 			</section>

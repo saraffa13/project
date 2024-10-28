@@ -33,6 +33,7 @@ const CartPage = () => {
         )}
         {cartItems.map((item: any) => (
           <MedicineCard 
+            specialOffer={false}
             key={item._id} 
             medicine={item.item} 
             price={item.item.price} 

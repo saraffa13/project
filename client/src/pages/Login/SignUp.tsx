@@ -71,9 +71,9 @@ export const SignUp = () => {
         if (!values.password) {
             errors.password = "Required";
         }
-        //  else if (values.password.length < 6) {
-        //     errors.password = "Password must contain at least 6 characters";
-        // }
+         else if (values.password.length < 6) {
+            errors.password = "Password must contain at least 6 characters";
+        }
         
 
         if (!values.role) {

@@ -6,25 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart, deleteFromCart, updateQuantity } from "../store/slicers/cartSlicer";
 import { AiFillDelete } from "react-icons/ai";
-import { notifyError } from "../utils/helper";
+import { notify, notifyError } from "../utils/helper";
+import { deleteMedicine } from "../store/slicers/medicineSlicer";
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
-const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, priceOff }: any) => {
+const MedicineCard = ({specialOffer, medicine, type, inventory_quantity, quantity, price, priceOff }: any) => {
+	
+	console.log(medicine);
 
 	const dispatch = useDispatch();
 	const { cartItems } = useSelector((state: any) => state.cart);
 	const { loggedIn, role } = useSelector((state: any) => state.auth);
 
 
-	// useEffect(() => {
-	//   const item = cartItems.find((item: any) => item.item === medicine._id);
-	//   if (item) {
-	//     console.log(item);
-	//   }
-	// }, [cartItems, medicine._id]);
-
 	const addMedicineToCart = async (medicineId: string, name: string, price: number) => {
+		console.log(medicineId);
 		try {
 			await axios.post(
 				`${baseURL}/cart/add-to-cart`,
@@ -38,8 +35,8 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 	};
 
 	const updateQty = async (medicineId: string, type: string, price: number) => {
-		if(type === 'increment'){
-			if(quantity >= inventory_quantity){
+		if (type === 'increment') {
+			if (quantity >= inventory_quantity) {
 				notifyError("Maximum available stock reached. You cannot add more of this item.");
 				return;
 			}
@@ -56,7 +53,7 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 		}
 	};
 
-	const deleteMedicine = async (medicineId: string, price: number, quantity: number) => {
+	const deleteMedicineFromCart = async (medicineId: string, price: number, quantity: number) => {
 		try {
 			await axios.post(`${baseURL}/cart/delete/`, {
 				medicineId,
@@ -67,7 +64,22 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 			});
 			dispatch(deleteFromCart({ id: medicineId, price, quantity }));
 		} catch (error) {
-			alert("Failed to remove medicine from cart");
+			notifyError("Failed to remove medicine from cart");
+		}
+	};
+
+	const deleteMedicineFromDb = async (medicineId: string) => {
+		console.log(medicineId);
+		try {
+			await axios.post(`${baseURL}/medicine/delete-medicine/`, {
+				medicineId,
+			}, {
+				withCredentials: true,
+			});
+			dispatch(deleteMedicine({ medicineId }));
+			notify("Deleted Successfully!")
+		} catch (error) {
+			notifyError("Failed to delete medicine");
 		}
 	};
 
@@ -85,7 +97,7 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 					{priceOff}% Off
 				</span>}
 
-				<Link to={`details/${medicine._id}`} className="relative">
+				<Link to={(specialOffer===false )?`details/${medicine._id}`:`medicines/details/${medicine._id}`} className="relative">
 					<img
 						src={medicine.image_url}
 						alt={medicine.name}
@@ -130,7 +142,7 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 							</div>
 						</div>
 
-						{loggedIn && role === 'user' && medicine.inventory_quantity > 0 && quantity === 0 && (
+						{specialOffer === false && loggedIn && role === 'user' && medicine.inventory_quantity > 0 && quantity === 0 && (
 							<button
 								onClick={(e) => {
 									e.preventDefault();
@@ -142,7 +154,7 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 							</button>
 						)}
 
-						{loggedIn && quantity > 0 && (
+						{specialOffer === false && loggedIn && quantity > 0 && (
 							<div className="flex items-center space-x-2">
 								<div className="flex items-center bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow-md">
 									<button
@@ -167,7 +179,7 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 								<button
 									onClick={(e) => {
 										e.preventDefault();
-										deleteMedicine(medicine._id, discountedPrice, quantity);
+										deleteMedicineFromCart(medicine._id, discountedPrice, quantity);
 									}}
 									className="p-2 bg-transparent border border-red-500 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200"
 								>
@@ -175,6 +187,19 @@ const MedicineCard = ({ medicine, type, inventory_quantity, quantity, price, pri
 								</button>
 							</div>
 						)}
+
+						{specialOffer === false && loggedIn && role !== 'user' && (
+							<button
+								onClick={(e) => {
+									e.preventDefault();
+									deleteMedicineFromDb(medicine._id);
+								}}
+								className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 ml-2"
+							>
+								Delete Medicine
+							</button>
+						)}
+
 					</div>
 				</div>
 			</div>

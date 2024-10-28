@@ -96,6 +96,7 @@ const Medicine = () => {
 				{filteredMedicines.length > 0 ? (
 					filteredMedicines.map((medicine: any) => (
 						<MedicineCard
+							specialOffer={false}
 							key={medicine._id}
 							inventory_quantity={medicine.inventory_quantity}
 							medicine={medicine}

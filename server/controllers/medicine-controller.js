@@ -44,16 +44,20 @@ module.exports.createMedicine = async (req, res) => {
 
 module.exports.editMedicine = async (req, res) => {
 
-    const { medicine } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
 
+    const { medicine } = req.body;
     try {
 
         const fetchedMedicine = await medicineModel.findById(medicine._id);
         if (fetchedMedicine) {
             fetchedMedicine.name = medicine.name,
-            fetchedMedicine.price = medicine.price,
-            fetchedMedicine.inventory_quantity = medicine.inventory_quantity,
-            fetchedMedicine.composition = medicine.composition
+                fetchedMedicine.price = medicine.price,
+                fetchedMedicine.inventory_quantity = medicine.inventory_quantity,
+                fetchedMedicine.composition = medicine.composition
             fetchedMedicine.priceOff = medicine.priceOff
             fetchedMedicine.category = medicine.category
         }
@@ -72,14 +76,65 @@ module.exports.editMedicine = async (req, res) => {
 
 }
 
-module.exports.getMedicine = async (req, res) => {
+module.exports.deleteMedicine = async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const { medicineId } = req.body;
 
     try {
 
-        const medicine = await medicineModel.find();
+        const fetchedMedicine = await medicineModel.findByIdAndDelete(medicineId);
+
+        if (!fetchedMedicine) {
+            return res.status(404).json({ message: 'Medicine not found' });
+        }
+
+        if (fetchedMedicine.image_url) {
+            await cloudinary.uploader.destroy(fetchedMedicine.image_url);
+        }
+
+        res.status(200).json({
+            message: "Deleted Successfully!",
+            data: fetchedMedicine
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(404).json({
+            message: "Couldn't delete medicine. Something went wrong!"
+        })
+    }
+
+}
+
+module.exports.getMedicine = async (req, res) => {
+
+    try {
+        const medicine = await medicineModel.find().sort({ name: 1 });
 
         res.status(202).json({
             message: "Here is the medicine",
+            data: medicine
+        })
+
+    } catch (error) {
+        res.status(404).json({
+            message: "Couldn't create medicine. Something went wrong!"
+        })
+    }
+}
+
+module.exports.getFeaturedMedicines = async (req, res) => {
+
+    try {
+        const medicine = await medicineModel.find().sort({ quantity_sold: -1 });
+
+        res.status(202).json({
+            message: "Here are the medicines",
             data: medicine
         })
 
@@ -94,7 +149,7 @@ module.exports.getSpecialOffersMedicines = async (req, res) => {
 
     try {
 
-        const medicine = (await medicineModel.find().sort({priceOff:-1})).splice(0,4);
+        const medicine = (await medicineModel.find().sort({ priceOff: -1 })).splice(0, 4);
 
         res.status(202).json({
             message: "Here is the medicine",
