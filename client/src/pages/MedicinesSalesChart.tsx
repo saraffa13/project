@@ -19,6 +19,7 @@ const MedicineSalesCharts = () => {
 			{medicines.map((medicine: any) => {
 
 				if (medicine.sales && medicine.sales.length > 0) {
+					
 					const salesData = medicine.sales.map((sale: any) => ({
 						date: new Date(sale.date).toLocaleDateString(),
 						quantity: sale.quantity

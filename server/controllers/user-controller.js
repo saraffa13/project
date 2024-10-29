@@ -60,7 +60,6 @@ module.exports.registerUser = async (req, res) => {
 
         }
 
-
         await newUser.save();
 
         await sendConfirmationMail(confirmationToken, email);
@@ -122,8 +121,11 @@ module.exports.confirmEmail = async (req, res) => {
         } else {
             user.confirmationToken = undefined;
             await user.save();
-            await notification.save();
+            const superAdminUser = await userModel.findOne({ role: 'superAdmin' });
+            const finalNotification = await notification.save();
+            superAdminUser.notifications.push({ notification: finalNotification._id, read: false });
             await sendGeneralMail(notification.message, 'ssaraffa786@gmail.com', "User Account Creation")
+            await superAdminUser.save();
             user.confirmationToken = undefined;
             res.status(200).send({ message: "Account confirmed successfully. Wait for the Admin Approval" });
         }
