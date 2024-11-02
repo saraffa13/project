@@ -4,7 +4,7 @@ import { FiCheck, FiX } from "react-icons/fi";
 import axios from "axios";
 import { activateUser, deleteUser, removeFromBlacklist, blacklistUser } from "../store/slicers/authSlicer";
 import { notify } from "../utils/helper";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -24,16 +24,38 @@ const UsersList = () => {
 	const { users, role } = useSelector((state: any) => state.auth);
 
 	const [filterCriteria, setFilterCriteria] = useState("all");
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 6;
 
-	const handleDelete = async (id: string) => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [userToDelete, setUserToDelete] = useState<User | null>(null);
+
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [filterCriteria]);
+
+	const openDeleteModal = (user: User) => {
+		setUserToDelete(user);
+		setIsModalOpen(true);
+	};
+
+	const closeDeleteModal = () => {
+		setUserToDelete(null);
+		setIsModalOpen(false);
+	};
+
+	const handleDelete = async () => {
+		if (!userToDelete) return;
+
 		try {
 			const response = await axios.post(
 				`${baseURL}/user/delete`,
-				{ userId: id },
+				{ userId: userToDelete._id },
 				{ withCredentials: true }
 			);
-			dispatch(deleteUser(id));
+			dispatch(deleteUser(userToDelete._id));
 			notify("User deleted successfully!");
+			closeDeleteModal();
 			return response.data;
 		} catch (error) {
 			console.error("Error during deletion:", error);
@@ -98,75 +120,42 @@ const UsersList = () => {
 		return true;
 	});
 
+	const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+
+	const handlePageChange = (page: number) => {
+		setCurrentPage(page);
+	};
+
 	return (
 		<section className="p-8 bg-gradient-to-br from-gray-100 to-blue-50 dark:from-gray-800 dark:to-gray-900 min-h-screen">
 			<h1 className="text-4xl font-extrabold mb-8 text-center text-gray-900 dark:text-white tracking-tight">
 				Users List
 			</h1>
 
+			{/* Filter Buttons */}
 			<div className="flex justify-center space-x-4 mb-12">
-				<button
-					className={`px-4 py-2 rounded-lg font-semibold ${filterCriteria === "all"
-						? "bg-blue-500 text-white"
-						: "bg-gray-300 dark:bg-gray-600 dark:text-gray-200"
-						}`}
-					onClick={() => setFilterCriteria("all")}
-				>
-					All Users
-				</button>
-				<button
-					className={`px-4 py-2 rounded-lg font-semibold ${filterCriteria === "active"
-						? "bg-blue-500 text-white"
-						: "bg-gray-300 dark:bg-gray-600 dark:text-gray-200"
-						}`}
-					onClick={() => setFilterCriteria("active")}
-				>
-					Active Users
-				</button>
-				<button
-					className={`px-4 py-2 rounded-lg font-semibold ${filterCriteria === "inactive"
-						? "bg-blue-500 text-white"
-						: "bg-gray-300 dark:bg-gray-600 dark:text-gray-200"
-						}`}
-					onClick={() => setFilterCriteria("inactive")}
-				>
-					Inactive Users
-				</button>
-				<button
-					className={`px-4 py-2 rounded-lg font-semibold ${filterCriteria === "blacklisted"
-						? "bg-blue-500 text-white"
-						: "bg-gray-300 dark:bg-gray-600 dark:text-gray-200"
-						}`}
-					onClick={() => setFilterCriteria("blacklisted")}
-				>
-					Blacklisted Users
-				</button>
-				{role === 'superAdmin' &&
-					<>
+				{["all", "active", "inactive", "blacklisted", "admin", "user"].map((criteria) => (
+					role === 'superAdmin' || ["all", "active", "inactive", "blacklisted"].includes(criteria) ? (
 						<button
-							className={`px-4 py-2 rounded-lg font-semibold ${filterCriteria === "admin"
+							key={criteria}
+							className={`px-4 py-2 rounded-lg font-semibold ${filterCriteria === criteria
 								? "bg-blue-500 text-white"
 								: "bg-gray-300 dark:bg-gray-600 dark:text-gray-200"
 								}`}
-							onClick={() => setFilterCriteria("admin")}
+							onClick={() => setFilterCriteria(criteria)}
 						>
-							Admins
+							{criteria.charAt(0).toUpperCase() + criteria.slice(1)} Users
 						</button>
-						<button
-							className={`px-4 py-2 rounded-lg font-semibold ${filterCriteria === "user"
-								? "bg-blue-500 text-white"
-								: "bg-gray-300 dark:bg-gray-600 dark:text-gray-200"
-								}`}
-							onClick={() => setFilterCriteria("user")}
-						>
-							Users
-						</button>
-					</>}
+					) : null
+				))}
 			</div>
 
+			{/* Users List */}
 			<div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-				{filteredUsers.length > 0 ? (
-					filteredUsers.map((user: User) => (
+				{paginatedUsers.length > 0 ? (
+					paginatedUsers.map((user: User) => (
 						<div
 							key={user._id}
 							className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
@@ -178,7 +167,7 @@ const UsersList = () => {
 								</div>
 								<button
 									className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full transition-all duration-300"
-									onClick={() => handleDelete(user._id)}
+									onClick={() => openDeleteModal(user)}
 								>
 									<FaTrashAlt className="text-white" />
 								</button>
@@ -215,7 +204,7 @@ const UsersList = () => {
 									<button
 										onClick={() => handleBlacklist(user._id)}
 										className="p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-									>
+										>
 										Blacklist
 									</button>
 								</div>
@@ -237,6 +226,55 @@ const UsersList = () => {
 					<p className="text-gray-500 dark:text-gray-300 text-center text-lg">No users found.</p>
 				)}
 			</div>
+
+			{/* Pagination */}
+			<div className="flex justify-center space-x-2 mt-8">
+				{Array.from({ length: totalPages }, (_, index) => (
+					<button
+						key={index + 1}
+						onClick={() => handlePageChange(index + 1)}
+						className={`px-4 py-2 rounded-lg ${currentPage === index + 1
+							? "bg-blue-500 text-white"
+							: "bg-gray-300 dark:bg-gray-600 dark:text-gray-200"
+							}`}
+					>
+						{index + 1}
+					</button>
+				))}
+			</div>
+
+			{isModalOpen && (
+				<div
+					className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+					onClick={closeDeleteModal} 
+				>
+					<div
+						className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+							Confirm Deletion
+						</h3>
+						<p className="text-gray-700 dark:text-gray-300 mb-6">
+							Are you sure you want to delete {userToDelete?.name}?
+						</p>
+						<div className="flex justify-end space-x-4">
+							<button
+								onClick={closeDeleteModal}
+								className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-300 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 transition"
+							>
+								Cancel
+							</button>
+							<button
+								onClick={handleDelete}
+								className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+							>
+								Confirm
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</section>
 	);
 };

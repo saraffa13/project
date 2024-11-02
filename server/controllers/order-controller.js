@@ -114,3 +114,34 @@ module.exports.postOrders = async (req, res) => {
     }
 }
 
+
+module.exports.changeStatusOfOrders = async (req, res) => {
+
+    const {orderId, status} = req.body;
+
+    try {
+
+        let orderData = await orderModel.findById(orderId);
+
+        if (!orderData) {
+            res.status(501).json({
+                message: "Invalid Order!",
+            })
+        }
+
+        orderData.status = status;
+
+        await orderData.save()
+
+        res.status(200).json({
+            message: "Status changed successfully",
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Something went wrong!"
+        })
+    }
+}
+

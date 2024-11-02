@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 interface MedicineCardProps {
   name: string;
@@ -171,12 +172,10 @@ const Orders = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredByDateOrders.length > 0 ? (
           filteredByDateOrders.map((order: any) => {
-            const deliveryDate = new Date(order.deliveryDate);
-            const currentDate = new Date();
-            const status = deliveryDate < currentDate ? "Delivered" : order.status;
+            const status = order.status
 
             return (
-              <div
+              <Link to={`${order._id}`}
                 key={order._id}
                 className="p-6 bg-white border border-gray-200 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:border-blue-600"
               >
@@ -193,9 +192,9 @@ const Orders = () => {
                   Status:{" "}
                   <span
                     className={`${
-                      status === "Delivered"
+                      status === "delivered"
                         ? "text-green-600"
-                        : "text-yellow-500"
+                        :status === "pending"? "text-yellow-500":"text-red-500"
                     } font-medium`}
                   >
                     {status}
@@ -221,7 +220,7 @@ const Orders = () => {
                 ) : (
                   <p className="text-gray-500">No items in this order.</p>
                 )}
-              </div>
+              </Link>
             );
           })
         ) : (

@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Home from "../pages/Home";
 import Layout from "../pages/Layout";
 import Login from "../pages/Login/Login";
@@ -23,6 +23,7 @@ import ConfirmEmail from "../pages/Login/ConfirmEmail";
 import ForgotPassword from "../pages/Login/ForgotPassword";
 import ChangePassword from "../pages/Login/ChangePassword";
 import NotificationsList from "../pages/NotificationList";
+import OrderDetails from "../pages/OrderDetails";
 
 const AllRoutes = () => {
     const router = createBrowserRouter([
@@ -74,7 +75,17 @@ const AllRoutes = () => {
                 },
                 {
                     path: '/admin/orders',
-                    element: <AuthGuard adminOnly={true}><AdminOrders /></AuthGuard>
+                    element:<Outlet />,
+                    children:[
+                        {
+                            index:true,
+                            element:<AdminOrders />
+                        },
+                        {
+                            path:'/admin/orders/:orderId',
+                            element:<OrderDetails />
+                        }
+                    ]
                 },
                 {
                     path: '/admin/users',
@@ -86,7 +97,17 @@ const AllRoutes = () => {
                 },
                 {
                     path: '/orders',
-                    element: <Orders />
+                    element: <Outlet />,
+                    children:[
+                        {
+                            index:true,
+                            element:<Orders />
+                        },
+                        {
+                            path:'/orders/:orderId',
+                            element:<OrderDetails />
+                        }
+                    ]
                 },
                 {
                     path: '/confirm-email/:token',
