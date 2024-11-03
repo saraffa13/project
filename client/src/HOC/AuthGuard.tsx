@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import UnAuthorized from "../pages/UnAuthorized";

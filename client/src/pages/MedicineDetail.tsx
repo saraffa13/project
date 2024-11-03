@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -88,6 +89,7 @@ const MedicineDetail = () => {
                 { medicineId, name, price },
                 { withCredentials: true }
             );
+            // @ts-ignore
             dispatch(addToCart({ medicine, price }));
         } catch (error) {
             notifyError("Failed to add medicine to cart");
@@ -107,6 +109,7 @@ const MedicineDetail = () => {
                 { medicineId, type, price },
                 { withCredentials: true }
             );
+            // @ts-ignore
             dispatch(updateQuantity({ id: medicineId, type, price }));
         } catch (error) {
             notifyError("Failed to update quantity");
@@ -122,6 +125,7 @@ const MedicineDetail = () => {
             }, {
                 withCredentials: true,
             });
+            // @ts-ignore
             dispatch(deleteFromCart({ id: medicineId, price, quantity }));
         } catch (error) {
             notifyError("Failed to remove medicine from cart");

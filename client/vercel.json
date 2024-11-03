@@ -1,0 +1,17 @@
+{
+    "builds": [
+      {
+        "src": "package.json",
+        "use": "@vercel/static-build",
+        "config":{
+            "tsconfig": {
+              "compilerOptions": {
+                "skipLibCheck": true
+              }
+            }
+          }
+      }
+    ],
+    "outputDirectory": "dist"
+  }
+  

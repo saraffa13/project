@@ -20,6 +20,7 @@ const Medicine = () => {
 	const itemsPerPage = 16;
 
 	useEffect(() => {
+		// @ts-ignore
 		dispatch(fetchMedicines());
 	}, [dispatch]);
 

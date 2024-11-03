@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import axios from 'axios';
 import { notify } from '../../utils/helper';

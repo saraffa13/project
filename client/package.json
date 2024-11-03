@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --noEmit && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -28,6 +28,9 @@
     "react-toastify": "^10.0.6"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
     "@eslint/js": "^9.11.1",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.3.10",

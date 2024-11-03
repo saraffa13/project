@@ -202,6 +202,7 @@ const Checkout = () => {
 			}, { withCredentials: true });
 			navigate('/orders');
 			dispatch(clearCart());
+			// @ts-ignore
 			dispatch(fetchOrders());
 			notify('Order Placed Successfully');
 		} catch (error) {

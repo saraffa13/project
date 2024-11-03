@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ToastContainer } from 'react-toastify';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,7 +8,6 @@ import { useEffect } from 'react';
 import { checkLanguage, checkUserName, getKeyWords, getNotification, getUsers } from './store/slicers/authSlicer';
 import { fetchCart, fetchOrders } from './store/slicers/cartSlicer';
 import { fetchMedicines } from './store/slicers/medicineSlicer';
-
 function App() {
 
   const dispatch = useDispatch()

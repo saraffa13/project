@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';

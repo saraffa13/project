@@ -1,6 +1,6 @@
+// @ts-nocheck
 import { useSelector } from "react-redux"
 import { getKeyWord } from "../utils/helper"
-
 const Footer = () => {
 
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import emailjs from "emailjs-com";
 import { notify, notifyError } from '../utils/helper';

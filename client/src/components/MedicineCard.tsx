@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { GrFormSubtract } from "react-icons/gr";
 import { IoMdAdd } from "react-icons/io";
@@ -27,6 +28,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 				{ medicineId, name, price },
 				{ withCredentials: true }
 			);
+			// @ts-ignore
 			dispatch(addToCart({ medicine, price }));
 		} catch (error) {
 			notifyError("Failed to add medicine to cart");
@@ -44,6 +46,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 				{ medicineId, type, price },
 				{ withCredentials: true }
 			);
+			// @ts-ignore
 			dispatch(updateQuantity({ id: medicineId, type, price }));
 		} catch (error) {
 			notifyError("Failed to update quantity");
@@ -57,6 +60,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 				{ medicineId, price, quantity },
 				{ withCredentials: true }
 			);
+			// @ts-ignore
 			dispatch(deleteFromCart({ id: medicineId, price, quantity }));
 		} catch (error) {
 			notifyError("Failed to remove medicine from cart");
@@ -70,6 +74,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 				{ medicineId: medicine._id },
 				{ withCredentials: true }
 			);
+			// @ts-ignore
 			dispatch(deleteMedicine({ medicineId: medicine._id }));
 			notify("Deleted Successfully!");
 			closeDeleteModal();

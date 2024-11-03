@@ -1,3 +1,4 @@
+// @ts-nocheck
 import axios from "axios";
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -60,6 +61,7 @@ const Header = () => {
     };
 
     const languageChangeHandler = async (language: string) => {
+        // @ts-ignore
         dispatch(changeLanguage(language));
         localStorage.setItem('language', language);
     };

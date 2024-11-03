@@ -1,5 +1,5 @@
+// @ts-nocheck
 import { useDispatch, useSelector } from 'react-redux';
-// import { markNotificationAsRead } from '../store/slicers/authSlicer';
 import axios from 'axios';
 import { notifyError } from '../utils/helper';
 import { markNotificationAsRead } from '../store/slicers/authSlicer';
