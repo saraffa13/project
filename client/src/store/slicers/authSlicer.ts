@@ -59,7 +59,7 @@ export const checkUserName = createAsyncThunk<any>(
 export const getKeyWords = createAsyncThunk<boolean>(
     "auth/getKeyWords",
     async () => {
-        const response = await axios.get(`${baseURL}/translation/`, {
+        const response = await axios.get(`${baseURL}/translation`, {
             withCredentials: true,
         });
         return response.data.data[0].translations;
@@ -69,7 +69,7 @@ export const getKeyWords = createAsyncThunk<boolean>(
 export const getNotification = createAsyncThunk<any>(
     "auth/getNotification",
     async () => {
-        const response = await axios.get(`${baseURL}/user/notification/`, {
+        const response = await axios.get(`${baseURL}/user/notification`, {
             withCredentials: true,
         });
         console.log(response.data.data);
