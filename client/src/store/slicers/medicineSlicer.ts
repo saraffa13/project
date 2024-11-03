@@ -14,7 +14,7 @@ const initialMedicineList: MedicineListType = {
 export const fetchMedicines = createAsyncThunk<any>(
   "medicine/fetchMedicines",
   async () => {
-    const response = await axios.get(`${baseURL}medicine`);
+    const response = await axios.get(`${baseURL}/medicine`);
     console.log(response.data.data);
     return response.data.data;
   }

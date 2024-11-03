@@ -38,7 +38,7 @@ const OrderDetails = () => {
 
     const handleStatusChange = async () => {
         try {
-            await axios.post(`${baseURL}order/change-status`, { orderId, status, });
+            await axios.post(`${baseURL}/order/change-status`, { orderId, status, });
             dispatch(changeStatusOfOrder({ orderId, status }));
             navigate("/admin/orders")
         } catch (error) {

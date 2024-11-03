@@ -30,7 +30,7 @@ const Home = () => {
 	useEffect(() => {
 		const fetchMedicines = async (type: string) => {
 			try {
-				const response = await axios.get(`${baseURL}medicine/${type}`);
+				const response = await axios.get(`${baseURL}/medicine/${type}`);
 				const offerMedicines = response.data.data;
 
 				if (type === 'special-offers') {

@@ -23,7 +23,7 @@ export const SignUp = () => {
 
     const signUp = async (values: FormValues) => {
         try {
-            const response = await axios.post(`${baseURL}user/register`, {
+            const response = await axios.post(`${baseURL}/user/register`, {
                 name: values.name,
                 gender: values.gender,
                 email: values.email,

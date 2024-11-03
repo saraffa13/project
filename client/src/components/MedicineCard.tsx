@@ -24,7 +24,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 	const addMedicineToCart = async (medicineId: string, name: string, price: number) => {
 		try {
 			await axios.post(
-				`${baseURL}cart/add-to-cart`,
+				`${baseURL}/cart/add-to-cart`,
 				{ medicineId, name, price },
 				{ withCredentials: true }
 			);
@@ -42,7 +42,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 		}
 		try {
 			await axios.post(
-				`${baseURL}cart/update-quantity`,
+				`${baseURL}/cart/update-quantity`,
 				{ medicineId, type, price },
 				{ withCredentials: true }
 			);
@@ -56,7 +56,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 	const deleteMedicineFromCart = async (medicineId: string, price: number, quantity: number) => {
 		try {
 			await axios.post(
-				`${baseURL}cart/delete/`,
+				`${baseURL}/cart/delete/`,
 				{ medicineId, price, quantity },
 				{ withCredentials: true }
 			);
@@ -70,7 +70,7 @@ const MedicineCard = ({ specialOffer, medicine, type, inventory_quantity, quanti
 	const deleteMedicineFromDb = async () => {
 		try {
 			await axios.post(
-				`${baseURL}medicine/delete-medicine/`,
+				`${baseURL}/medicine/delete-medicine/`,
 				{ medicineId: medicine._id },
 				{ withCredentials: true }
 			);

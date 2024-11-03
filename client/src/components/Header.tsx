@@ -40,7 +40,7 @@ const Header = () => {
 
     const logoutHandler = async () => {
         try {
-            const response = await axios.get(`${baseURL}user/logout`, { withCredentials: true });
+            const response = await axios.get(`${baseURL}/user/logout`, { withCredentials: true });
             localStorage.setItem('loggedIn', 'false')
             navigate('/login');
             dispatch(logout());

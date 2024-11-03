@@ -64,7 +64,7 @@ const MedicineDetail = () => {
     const editMedicineHandler = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post(`${baseURL}medicine/edit-medicine`, { medicine: formData }, { withCredentials: true });
+            await axios.post(`${baseURL}/medicine/edit-medicine`, { medicine: formData }, { withCredentials: true });
             setIsEditing(false);
             notify("Edited Successfully!");
             navigate("/medicines");
@@ -85,7 +85,7 @@ const MedicineDetail = () => {
     const addMedicineToCart = async (medicineId: string, name: string, price: number) => {
         try {
             await axios.post(
-                `${baseURL}cart/add-to-cart`,
+                `${baseURL}/cart/add-to-cart`,
                 { medicineId, name, price },
                 { withCredentials: true }
             );
@@ -105,7 +105,7 @@ const MedicineDetail = () => {
         }
         try {
             await axios.post(
-                `${baseURL}cart/update-quantity`,
+                `${baseURL}/cart/update-quantity`,
                 { medicineId, type, price },
                 { withCredentials: true }
             );
@@ -118,7 +118,7 @@ const MedicineDetail = () => {
 
     const deleteMedicineFromCart = async (medicineId: string, price: number, quantity: number) => {
         try {
-            await axios.post(`${baseURL}cart/delete/`, {
+            await axios.post(`${baseURL}/cart/delete/`, {
                 medicineId,
                 price,
                 quantity

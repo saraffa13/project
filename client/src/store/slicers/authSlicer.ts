@@ -41,7 +41,7 @@ export const checkUserName = createAsyncThunk<any>(
     const loggedIn = localStorage.getItem("loggedIn");
     if (loggedIn && loggedIn === "true") {
       try {
-        const response = await axios.get(`${baseURL}user/get-user`, {
+        const response = await axios.get(`${baseURL}/user/get-user`, {
           withCredentials: true,
         });
         localStorage.setItem("role", response.data.data.role);
@@ -59,7 +59,7 @@ export const checkUserName = createAsyncThunk<any>(
 export const getKeyWords = createAsyncThunk<boolean>(
   "auth/getKeyWords",
   async () => {
-    const response = await axios.get(`${baseURL}translation`, {
+    const response = await axios.get(`${baseURL}/translation`, {
       withCredentials: true,
     });
     return response.data.data[0].translations;
@@ -69,7 +69,7 @@ export const getKeyWords = createAsyncThunk<boolean>(
 export const getNotification = createAsyncThunk<any>(
   "auth/getNotification",
   async () => {
-    const response = await axios.get(`${baseURL}user/notification`, {
+    const response = await axios.get(`${baseURL}/user/notification`, {
       withCredentials: true,
     });
     console.log(response.data.data);
@@ -78,7 +78,7 @@ export const getNotification = createAsyncThunk<any>(
 );
 
 export const getUsers = createAsyncThunk<any>("auth/getUsers", async () => {
-  const response = await axios.get(`${baseURL}user/get-all-users`, {
+  const response = await axios.get(`${baseURL}/user/get-all-users`, {
     withCredentials: true,
   });
   console.log(response.data.data);

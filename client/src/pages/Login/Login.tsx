@@ -23,16 +23,16 @@ export const Login = () => {
 
     const apiLogin = async (values: FormValues) => {
         try {
-            const response = await axios.post(`${baseURL}user/login`, {
+            const response = await axios.post(`${baseURL}/user/login`, {
                 email: values.email,
                 password: values.password,
             });
             console.log(response.data);
             setLoggedIn(true);
-            return response.data; 
+            return response.data;
         } catch (error) {
             console.error("Error during login:", error);
-            throw error; 
+            throw error;
         }
     };
 

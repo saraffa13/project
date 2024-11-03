@@ -56,7 +56,7 @@ const MedicineForm = () => {
 		}
 
 		try {
-			await axios.post(`${baseURL}medicine/create-medicine`, formDataToSend, {
+			await axios.post(`${baseURL}/medicine/create-medicine`, formDataToSend, {
 				withCredentials: true,
 				headers: {
 					'Content-Type': 'multipart/form-data'

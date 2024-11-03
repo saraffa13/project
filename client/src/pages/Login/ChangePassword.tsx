@@ -39,7 +39,7 @@ const ChangePassword = () => {
 
     const handleSubmit = async (values: FormValues, { setSubmitting, resetForm }: FormikHelpers<FormValues>) => {
         try {
-            const response = await axios.post(`${baseURL}user/change-password`, {
+            const response = await axios.post(`${baseURL}/user/change-password`, {
                 newPassword: values.newPassword,
                 confirmationToken,
             });

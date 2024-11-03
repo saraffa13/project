@@ -49,7 +49,7 @@ const UsersList = () => {
 
 		try {
 			const response = await axios.post(
-				`${baseURL}user/delete`,
+				`${baseURL}/user/delete`,
 				{ userId: userToDelete._id },
 				{ withCredentials: true }
 			);
@@ -66,7 +66,7 @@ const UsersList = () => {
 	const handleActivation = async (activate: boolean, userId: string) => {
 		try {
 			const response = await axios.post(
-				`${baseURL}user/handleActivation`,
+				`${baseURL}/user/handleActivation`,
 				{ userId, activate },
 				{ withCredentials: true }
 			);
@@ -82,7 +82,7 @@ const UsersList = () => {
 	const handleBlacklist = async (userId: string) => {
 		try {
 			const response = await axios.post(
-				`${baseURL}user/blacklistUser`,
+				`${baseURL}/user/blacklistUser`,
 				{ userId },
 				{ withCredentials: true }
 			);
@@ -98,7 +98,7 @@ const UsersList = () => {
 	const handleRemoveBlacklist = async (userId: string) => {
 		try {
 			const response = await axios.post(
-				`${baseURL}user/remove-from-blacklist`,
+				`${baseURL}/user/remove-from-blacklist`,
 				{ userId },
 				{ withCredentials: true }
 			);
