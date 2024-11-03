@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: ['https://prodmedicart.vercel.app', 'http://localhost:5173'],
+    origin: ['https://project-nx35.vercel.app', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization '],
     credentials: true,
