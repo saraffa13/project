@@ -22,16 +22,16 @@ const Header = () => {
     const [darkMode, setDarkMode] = useLocalStorage<boolean>('dark', false);
 
     const { loggedIn, languageKeyWords, language, role: admin, notification } = useSelector((state: any) => state.auth);
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         let count = 0;
-        notification.forEach((notify:any)=>{
-            if(notify.read === false){
+        notification.forEach((notify: any) => {
+            if (notify.read === false) {
                 count++;
             }
         })
         setNumberOfReadNotifications(count);
-    },[notification])
+    }, [notification])
 
     const { cartItems } = useSelector((state: any) => state.cart);
 
@@ -40,7 +40,7 @@ const Header = () => {
 
     const logoutHandler = async () => {
         try {
-            const response = await axios.get(`${baseURL}/user/logout`, { withCredentials: true });
+            const response = await axios.get(`${baseURL}user/logout`, { withCredentials: true });
             localStorage.setItem('loggedIn', 'false')
             navigate('/login');
             dispatch(logout());

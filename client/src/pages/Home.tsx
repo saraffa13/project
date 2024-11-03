@@ -30,7 +30,7 @@ const Home = () => {
 	useEffect(() => {
 		const fetchMedicines = async (type: string) => {
 			try {
-				const response = await axios.get(`${baseURL}/medicine/${type}`);
+				const response = await axios.get(`${baseURL}medicine/${type}`);
 				const offerMedicines = response.data.data;
 
 				if (type === 'special-offers') {
@@ -98,7 +98,7 @@ const Home = () => {
 					<h2 className="text-3xl font-bold text-center mb-12">Featured Products</h2>
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 						{featuredProducts.slice(0, 3).map((product: any) => {
-							const {price, priceOff, quantity, _id, quantity_sold} = product;
+							const { price, priceOff, quantity, _id, quantity_sold } = product;
 
 							const displayedPrice = price || 0;
 							const discountedPrice = priceOff > 0 ? (displayedPrice - (displayedPrice * priceOff / 100)).toFixed(2) : displayedPrice.toFixed(2);
@@ -107,29 +107,29 @@ const Home = () => {
 							const totalDiscountedPrice = quantity > 0 ? (discountedPrice * quantity).toFixed(2) : discountedPrice;
 
 							return <Link
-							key={product.name}
-							to={`/medicines/details/${_id}`}
-							className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out"
-						  >
-							<img
-							  src={product.image_url}
-							  alt={product.name}
-							  className="w-full h-56 object-cover mb-6 rounded-lg transition-transform duration-300 ease-in-out hover:scale-110"
-							/>
-							<div className="text-center">
-							  <h3 className="text-2xl font-bold text-gray-800">{product.name}</h3>
-							  <p className="mt-2 text-lg font-medium text-gray-500">Sold: {quantity_sold}</p>
-							  <div className="flex justify-center items-center gap-2 mt-2">
-								<p className={`text-lg font-medium text-gray-600 ${totalDiscountedPrice > 0 ? 'line-through text-red-500' : ''}`}>
-								  ${totalDisplayedPrice}
-								</p>
-								{totalDiscountedPrice > 0 && (
-								  <p className="text-lg font-bold text-green-600">${totalDiscountedPrice}</p>
-								)}
-							  </div>
-							</div>
-						  </Link>
-						  
+								key={product.name}
+								to={`/medicines/details/${_id}`}
+								className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition duration-300 ease-in-out"
+							>
+								<img
+									src={product.image_url}
+									alt={product.name}
+									className="w-full h-56 object-cover mb-6 rounded-lg transition-transform duration-300 ease-in-out hover:scale-110"
+								/>
+								<div className="text-center">
+									<h3 className="text-2xl font-bold text-gray-800">{product.name}</h3>
+									<p className="mt-2 text-lg font-medium text-gray-500">Sold: {quantity_sold}</p>
+									<div className="flex justify-center items-center gap-2 mt-2">
+										<p className={`text-lg font-medium text-gray-600 ${totalDiscountedPrice > 0 ? 'line-through text-red-500' : ''}`}>
+											${totalDisplayedPrice}
+										</p>
+										{totalDiscountedPrice > 0 && (
+											<p className="text-lg font-bold text-green-600">${totalDiscountedPrice}</p>
+										)}
+									</div>
+								</div>
+							</Link>
+
 						})}
 					</div>
 				</div>

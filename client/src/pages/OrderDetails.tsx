@@ -38,8 +38,8 @@ const OrderDetails = () => {
 
     const handleStatusChange = async () => {
         try {
-            await axios.post(`${baseURL}/order/change-status`, { orderId, status, });
-            dispatch(changeStatusOfOrder({orderId, status}));
+            await axios.post(`${baseURL}order/change-status`, { orderId, status, });
+            dispatch(changeStatusOfOrder({ orderId, status }));
             navigate("/admin/orders")
         } catch (error) {
             console.error("Error updating order status:", error);
@@ -104,7 +104,7 @@ const OrderDetails = () => {
                     ))}
                 </div>
 
-                {role!== 'user' && <div className="mt-8 flex items-center space-x-4">
+                {role !== 'user' && <div className="mt-8 flex items-center space-x-4">
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}

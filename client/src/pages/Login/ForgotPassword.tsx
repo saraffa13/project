@@ -24,7 +24,7 @@ const ForgotPassword = () => {
 
     const handleSubmit = async (values: FormValues, { setSubmitting, resetForm }: FormikHelpers<FormValues>) => {
         try {
-            const response = await axios.post(`${baseURL}/user/forgot-password`, {
+            const response = await axios.post(`${baseURL}user/forgot-password`, {
                 email: values.email,
             });
             notify("Password reset link sent to your email!");

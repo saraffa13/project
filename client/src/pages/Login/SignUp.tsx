@@ -23,7 +23,7 @@ export const SignUp = () => {
 
     const signUp = async (values: FormValues) => {
         try {
-            const response = await axios.post(`${baseURL}/user/register`, {
+            const response = await axios.post(`${baseURL}user/register`, {
                 name: values.name,
                 gender: values.gender,
                 email: values.email,
@@ -43,7 +43,7 @@ export const SignUp = () => {
             await signUp(values);
             notify('Signup Successful! Please check your email to confirm your account!')
             navigate('/login')
-        } catch (error:any) {
+        } catch (error: any) {
             notify("Something went wrong")
             console.log('Something went wrong');
         } finally {
@@ -72,10 +72,10 @@ export const SignUp = () => {
         if (!values.password) {
             errors.password = "Required";
         }
-         else if (values.password.length < 6) {
+        else if (values.password.length < 6) {
             errors.password = "Password must contain at least 6 characters";
         }
-        
+
 
         if (!values.role) {
             errors.role = "Required";

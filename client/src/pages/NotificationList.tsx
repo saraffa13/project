@@ -13,7 +13,7 @@ const NotificationPage = () => {
   const handleMarkAsRead = async (notificationId: any) => {
     try {
       const response = await axios.post(
-        `${baseURL}/user/notification/markAsRead`,
+        `${baseURL}user/notification/markAsRead`,
         { notificationId },
         { withCredentials: true }
       );
@@ -34,9 +34,8 @@ const NotificationPage = () => {
             {notification?.map((notify: any) => (
               <li
                 key={notify?._id}
-                className={`flex justify-between items-start p-4 rounded-md hover:bg-blue-50 transition-all duration-200 ${
-                  notify.read ? 'bg-gray-100' : 'bg-blue-100'
-                }`}
+                className={`flex justify-between items-start p-4 rounded-md hover:bg-blue-50 transition-all duration-200 ${notify.read ? 'bg-gray-100' : 'bg-blue-100'
+                  }`}
               >
                 <div>
                   <p className="text-lg font-medium text-gray-800">
@@ -52,11 +51,10 @@ const NotificationPage = () => {
                 </div>
                 <div className="flex items-center space-x-4">
                   <span
-                    className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
-                      notify?.read
+                    className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${notify?.read
                         ? 'bg-green-200 text-green-800'
                         : 'bg-red-200 text-red-800'
-                    }`}
+                      }`}
                   >
                     {notify?.read ? 'Read' : 'Unread'}
                   </span>

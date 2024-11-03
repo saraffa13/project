@@ -18,7 +18,7 @@ const initialCart: cartState = {
 export const fetchCart = createAsyncThunk<any>(
     "cart/fetchCart",
     async () => {
-        const response = await axios.get(`${baseURL}/cart/`, { withCredentials: true })
+        const response = await axios.get(`${baseURL}cart/`, { withCredentials: true })
         console.log(response.data.data);
         return response.data.data;
     }
@@ -26,7 +26,7 @@ export const fetchCart = createAsyncThunk<any>(
 export const fetchOrders = createAsyncThunk<any>(
     "cart/fetchOrders",
     async () => {
-        const response = await axios.get(`${baseURL}/order/`, { withCredentials: true })
+        const response = await axios.get(`${baseURL}order/`, { withCredentials: true })
         console.log(response.data.data);
         return response.data.data;
     }

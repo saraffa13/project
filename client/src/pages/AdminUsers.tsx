@@ -49,7 +49,7 @@ const UsersList = () => {
 
 		try {
 			const response = await axios.post(
-				`${baseURL}/user/delete`,
+				`${baseURL}user/delete`,
 				{ userId: userToDelete._id },
 				{ withCredentials: true }
 			);
@@ -66,7 +66,7 @@ const UsersList = () => {
 	const handleActivation = async (activate: boolean, userId: string) => {
 		try {
 			const response = await axios.post(
-				`${baseURL}/user/handleActivation`,
+				`${baseURL}user/handleActivation`,
 				{ userId, activate },
 				{ withCredentials: true }
 			);
@@ -82,7 +82,7 @@ const UsersList = () => {
 	const handleBlacklist = async (userId: string) => {
 		try {
 			const response = await axios.post(
-				`${baseURL}/user/blacklistUser`,
+				`${baseURL}user/blacklistUser`,
 				{ userId },
 				{ withCredentials: true }
 			);
@@ -98,7 +98,7 @@ const UsersList = () => {
 	const handleRemoveBlacklist = async (userId: string) => {
 		try {
 			const response = await axios.post(
-				`${baseURL}/user/remove-from-blacklist`,
+				`${baseURL}user/remove-from-blacklist`,
 				{ userId },
 				{ withCredentials: true }
 			);
@@ -204,7 +204,7 @@ const UsersList = () => {
 									<button
 										onClick={() => handleBlacklist(user._id)}
 										className="p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-										>
+									>
 										Blacklist
 									</button>
 								</div>
@@ -246,7 +246,7 @@ const UsersList = () => {
 			{isModalOpen && (
 				<div
 					className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-					onClick={closeDeleteModal} 
+					onClick={closeDeleteModal}
 				>
 					<div
 						className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full"

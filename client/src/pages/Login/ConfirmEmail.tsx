@@ -14,7 +14,7 @@ const ConfirmEmail = () => {
     useEffect(() => {
         const confirmEmail = async () => {
             try {
-                const response = await axios.get(`${baseURL}/user/confirm-email/${token}`);
+                const response = await axios.get(`${baseURL}user/confirm-email/${token}`);
                 notify(response.data.message || "Email confirmed successfully!");
                 setError(false);
                 setTimeout(() => navigate("/login"), 3000);
