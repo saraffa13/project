@@ -168,7 +168,7 @@ module.exports.loginUser = async (req, res) => {
                 user: existingUser,
             }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' });
 
-            res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000, secure:true, sameSite: 'Lax' })
+            res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000, secure:true, sameSite: 'None' })
 
             return res.status(200).json({
                 message: "Login in Successful!",
