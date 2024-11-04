@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: ['*', 'https://prodmedicart.vercel.app', 'http://localhost:5173', 'http://localhost:5174'],
+    origin: ['*','https://pharmacy-puce.vercel.app', 'https://prodmedicart.vercel.app', 'http://localhost:5173', 'http://localhost:5174'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization '],
     credentials: true,
