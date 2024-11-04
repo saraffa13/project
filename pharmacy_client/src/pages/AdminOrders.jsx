@@ -141,7 +141,6 @@ const AdminOrders = () => {
 				{filteredOrders.length > 0 ? (
 					filteredOrders.map((order) => {
 						const status = order.status;
-
 						return (
 							<Link
 								to={`/admin/orders/${order._id}`}
@@ -209,7 +208,7 @@ const AdminOrders = () => {
 											<FaShippingFast className="mr-2 text-green-500 dark:text-green-300" />
 											Total Price:{" "}
 											<span className="font-medium text-gray-900 dark:text-gray-100 ml-1">
-												${order.orders.totalPrice.toFixed(2)}
+												${order?.orders?.totalPrice?.toFixed(2)}
 											</span>
 										</p>
 									</div>
