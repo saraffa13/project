@@ -20,11 +20,6 @@ const Medicine = () => {
 	const itemsPerPage = 16;
 
 	useEffect(() => {
-
-		dispatch(fetchMedicines());
-	}, [dispatch]);
-
-	useEffect(() => {
 		if ('type' in params) {
 			setSelectedCategory(params.type);
 		}
