@@ -1,5 +1,8 @@
 const nodemailer = require("nodemailer");
 
+const BASE_URL_FRONTEND = 'https://prodmedicart.vercel.app'
+
+
 const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -10,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports.sendConfirmationMail = async (confirmationToken, email) => {
     try {
-        const confirmationLink = `http://localhost:5173/confirm-email/${confirmationToken}`;
+        const confirmationLink = `${BASE_URL_FRONTEND}/confirm-email/${confirmationToken}`;
         const mailOptions = {
             to: email,
             from: "no-reply@yourapp.com",
@@ -61,7 +64,7 @@ module.exports.sendFinalMail = async (email) => {
 
 module.exports.sendForgotPasswordMail = async (confirmationToken, email) => {
     try {
-        const confirmationLink = `http://localhost:5173/change-password/${confirmationToken}`;
+        const confirmationLink = `${BASE_URL_FRONTEND}/change-password/${confirmationToken}`;
 
         const mailOptions = {
             to: email,
