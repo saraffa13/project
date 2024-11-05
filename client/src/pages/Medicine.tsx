@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { fetchMedicines } from "../store/slicers/medicineSlicer";
 import MedicineCard from "../components/MedicineCard";
+import Spinner from "./Spinner";
 
 const Medicine = () => {
 	const { medicines } = useSelector((state: any) => state.medicine);
@@ -127,7 +128,7 @@ const Medicine = () => {
 						/>
 					))
 				) : (
-					<p className="text-gray-600 text-lg">No medicines found.</p>
+					<p className="text-gray-600 text-lg"><Spinner /></p>
 				)}
 			</div>
 
