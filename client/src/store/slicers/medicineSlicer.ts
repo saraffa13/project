@@ -15,7 +15,6 @@ export const fetchMedicines = createAsyncThunk<any>(
   "medicine/fetchMedicines",
   async () => {
     const response = await axios.get(`${baseURL}/medicine`);
-    console.log(response.data.data);
     return response.data.data;
   }
 );
@@ -34,7 +33,6 @@ export const medicineSlice = createSlice({
     builder.addCase(
       fetchMedicines.fulfilled,
       (state: MedicineListType, action) => {
-        console.log(action.payload);
         state.medicines = action.payload;
       }
     );

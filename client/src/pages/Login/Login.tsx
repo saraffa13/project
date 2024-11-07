@@ -4,8 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { notify } from '../../utils/helper';
-import { checkUserName, login } from '../../store/slicers/authSlicer';
+import { checkUserName, getUsers, login } from '../../store/slicers/authSlicer';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import { fetchOrders } from '../../store/slicers/cartSlicer';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -29,6 +30,8 @@ export const Login = () => {
             });
             setLoggedIn(true);
             dispatch(checkUserName());
+            dispatch(getUsers());
+            dispatch(fetchOrders());
             return response.data;
         } catch (error) {
             console.error("Error during login:", error);
@@ -72,7 +75,16 @@ export const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center flex-col gap-10">
+            <div className='border border-black p-4'>
+                <strong>Super-Admin Credentials</strong>
+                <br />
+                Email : ssaraffa786@gmail.com
+                <br />
+                Password : Shivam
+                <br />
+                <strong>Login and Enjoy !</strong>
+            </div>
             <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
                 <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">
                     Login to your account

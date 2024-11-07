@@ -38,7 +38,6 @@ const Home = () => {
 					setSpecialOffers(offerMedicines);
 
 				} else {
-					console.log(offerMedicines);
 					setFeaturedProducts(offerMedicines)
 				}
 			} catch (error) {

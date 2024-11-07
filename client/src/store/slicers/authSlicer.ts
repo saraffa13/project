@@ -47,7 +47,6 @@ export const checkUserName = createAsyncThunk<any>(
 				localStorage.setItem("role", response.data.data.role);
 				return response.data.data;
 			} catch (error) {
-				console.log(error);
 				throw new Error("Error");
 			}
 		} else {
@@ -72,7 +71,6 @@ export const getNotification = createAsyncThunk<any>(
 		const response = await axios.get(`${baseURL}/user/notification`, {
 			withCredentials: true,
 		});
-		console.log(response.data.data);
 		return response.data.data;
 	}
 );
@@ -81,7 +79,6 @@ export const getUsers = createAsyncThunk<any>("auth/getUsers", async () => {
 	const response = await axios.get(`${baseURL}/user/get-all-users`, {
 		withCredentials: true,
 	});
-	console.log(response.data.data);
 	return response.data.data;
 });
 
@@ -165,7 +162,6 @@ export const authSlice = createSlice({
 				localStorage.setItem("loggedIn", "true");
 				(state.email = action.payload.email),
 					(state.role = action.payload.role);
-				console.log(action.payload);
 				state.notification = action.payload.notifications;
 				state.loggedIn = true;
 			}
@@ -180,7 +176,6 @@ export const authSlice = createSlice({
 		});
 
 		builder.addCase(getUsers.fulfilled, (state: UserState, action) => {
-			console.log(action.payload);
 			state.users = action.payload;
 		});
 	},

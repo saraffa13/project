@@ -19,7 +19,6 @@ export const fetchCart = createAsyncThunk<any>(
     "cart/fetchCart",
     async () => {
         const response = await axios.get(`${baseURL}/cart/`, { withCredentials: true })
-        console.log(response.data.data);
         return response.data.data;
     }
 );
@@ -27,7 +26,6 @@ export const fetchOrders = createAsyncThunk<any>(
     "cart/fetchOrders",
     async () => {
         const response = await axios.get(`${baseURL}/order/`, { withCredentials: true })
-        console.log(response.data.data);
         return response.data.data;
     }
 );
@@ -66,7 +64,6 @@ export const cartSlice = createSlice({
             })
         },
         updateQuantity: (state: any, action: any) => {
-            console.log(action.payload);
             if (action.payload.type === 'increment') {
                 state.totalPrice += Number(action.payload.price);
             } else {
