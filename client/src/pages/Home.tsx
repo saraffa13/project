@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MedicineCard from '../components/MedicineCard';
+import Spinner from './Spinner';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -78,7 +79,7 @@ const Home = () => {
 			<div className="py-16 bg-white">
 				<div className="max-w-7xl mx-auto px-4 md:px-0">
 					<h2 className="text-3xl font-bold text-center mb-12">Popular Categories</h2>
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+					{(categories && categories.length > 0) ? <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
 						{categories.map((category: any, index) => (
 							<Link key={category} to={`medicines/${category}`} className="text-center group">
 								<img
@@ -89,14 +90,16 @@ const Home = () => {
 								<p className="mt-4 text-lg font-semibold text-gray-700 group-hover:text-blue-600">{category}</p>
 							</Link>
 						))}
-					</div>
+					</div> : <div className='relative right-64'>
+						<Spinner />
+					</div>}
 				</div>
 			</div>
 
 			<section className="py-16 bg-gray-100">
 				<div className="max-w-7xl mx-auto px-4 md:px-0">
 					<h2 className="text-3xl font-bold text-center mb-12">Featured Products</h2>
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+					{(featuredProducts && featuredProducts.length > 0) ? <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 						{featuredProducts.slice(0, 3).map((product: any) => {
 							const { price, priceOff, quantity, _id, quantity_sold } = product;
 
@@ -131,14 +134,16 @@ const Home = () => {
 							</Link>
 
 						})}
-					</div>
+					</div> : <div className='relative right-72'>
+						<Spinner />
+					</div>}
 				</div>
 			</section>
 
 			<section className="py-16 bg-blue-600 text-white">
 				<div className="max-w-7xl mx-auto px-4 md:px-0">
 					<h2 className="text-3xl font-bold text-center mb-8">Special Offers</h2>
-					<div className="flex flex-wrap ">
+					{(specialOffers && specialOffers.length > 0) ? <div className="flex flex-wrap ">
 						{specialOffers.map((offer: any) => {
 							return <MedicineCard
 								specialOffers={true}
@@ -151,7 +156,11 @@ const Home = () => {
 								priceOff={offer.priceOff || 0}
 							/>
 						})}
-					</div>
+					</div> :
+						<div className='relative right-64'>
+							<Spinner />
+						</div>
+					}
 				</div>
 			</section>
 

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { notify } from '../../utils/helper';
-import { login } from '../../store/slicers/authSlicer';
+import { checkUserName, login } from '../../store/slicers/authSlicer';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
 let baseURL = import.meta.env.VITE_BASE_URL;
@@ -27,8 +27,8 @@ export const Login = () => {
                 email: values.email,
                 password: values.password,
             });
-            console.log(response.data);
             setLoggedIn(true);
+            dispatch(checkUserName());
             return response.data;
         } catch (error) {
             console.error("Error during login:", error);

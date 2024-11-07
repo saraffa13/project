@@ -2,7 +2,6 @@ const nodemailer = require("nodemailer");
 
 const BASE_URL_FRONTEND = 'https://prodmedicart.vercel.app'
 
-
 const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {

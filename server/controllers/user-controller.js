@@ -477,13 +477,13 @@ module.exports.getNotification = async (req, res) => {
                 data: []
             })
         } else if (role === 'admin') {
-            const notifications = await notificationModel.find({ role: 'user' });
+            const notifications = await notificationModel.find({ role: 'user' }).sort({ createdAt: -1 });;
             return res.status(200).json({
                 message: "Here are the list of Users!",
                 data: notifications
             })
         } else if (role === 'superAdmin') {
-            const notifications = await notificationModel.find({ role: { $in: ['admin', 'user'] } });
+            const notifications = await notificationModel.find({ role: { $in: ['admin', 'user'] } }).sort({ createdAt: -1 });;
 
             return res.status(200).json({
                 message: "Here are the list of Users!",

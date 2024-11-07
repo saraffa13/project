@@ -55,18 +55,19 @@ const AdminOrders = () => {
     });
 
   return (
-    <section className="p-8 bg-gradient-to-br from-gray-100 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
-      <h1 className="text-4xl font-extrabold mb-12 text-center text-gray-900 dark:text-gray-100 tracking-tight">
+    <section className="p-4 md:p-8 bg-gradient-to-br from-gray-100 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
+      <h1 className="text-2xl md:text-4xl font-extrabold mb-8 md:mb-12 text-center text-gray-900 dark:text-gray-100 tracking-tight">
         Your Admin Orders
       </h1>
 
-      <div className="max-w-5xl mx-auto mb-8 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      {/* Filters Section */}
+      <div className="max-w-5xl mx-auto mb-6 md:mb-8 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <input
           type="text"
           placeholder="Search by name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-3 border rounded-lg w-full md:col-span-2 lg:col-span-2 focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"
+          className="p-3 border rounded-lg w-full focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-gray-200"
         />
 
         <div className="flex items-center">
@@ -110,7 +111,7 @@ const AdminOrders = () => {
           />
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center col-span-1 sm:col-span-2 lg:col-span-1">
           <label htmlFor="statusFilter" className="mr-2 text-gray-700 dark:text-gray-300">
             Status:
           </label>
@@ -137,7 +138,8 @@ const AdminOrders = () => {
         </button>
       </div>
 
-      <div className="max-w-5xl mx-auto space-y-10">
+      {/* Orders List Section */}
+      <div className="max-w-5xl mx-auto space-y-6 md:space-y-10">
         {filteredOrders.length > 0 ? (
           filteredOrders.map((order: any) => {
             const status = order.status;
@@ -146,10 +148,10 @@ const AdminOrders = () => {
               <Link
                 to={`/admin/orders/${order._id}`}
                 key={order._id}
-                className="block p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg transition-all duration-300 transform hover:shadow-2xl hover:scale-105"
+                className="block p-4 sm:p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg transition-all duration-300 transform hover:shadow-2xl hover:scale-105"
               >
                 <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 flex items-center space-x-2">
+                  <h2 className="text-lg md:text-2xl font-bold text-blue-600 dark:text-blue-400 flex items-center space-x-2">
                     <FaBoxOpen />
                     <span>Order ID: {order._id}</span>
                   </h2>
@@ -160,13 +162,13 @@ const AdminOrders = () => {
                         : status === "pending"
                         ? "text-yellow-500"
                         : "text-red-500"
-                    } font-medium text-lg`}
+                    } font-medium text-sm md:text-lg`}
                   >
                     {status}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 flex items-center mb-2">
                       <FaUser className="mr-2 text-blue-500 dark:text-blue-300" />
