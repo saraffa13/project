@@ -3,3 +3,6 @@
 .vscode/
 
 npm-debug.log*
+
+.env
+.env.developement
